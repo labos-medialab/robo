@@ -1,6 +1,6 @@
 #include <Wire.h>
 #include <ADXL345.h> //lib za akcelerometar
-#include <BMP085.h>
+#include <BMP085.h> //lib za tlak i temperaturu
 
 const float alpha = 0.2;
 
