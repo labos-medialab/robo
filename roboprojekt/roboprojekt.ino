@@ -1,11 +1,14 @@
 #include <Wire.h>
 #include <ADXL345.h> //lib za akcelerometar
+#include <BMP085.h>
 
 const float alpha = 0.2;
 
 int rX=0, rY=0, rZ=0;
 int X=0, Y=0, Z=0;
 int Xo=0, Yo=0, Zo=0;
+
+float temperature;
 
 ADXL345 adxl; //ime akcelerometra u kodu
 
@@ -23,6 +26,8 @@ void setup(){
   
   adxl.begin(); //započni akcelerometru!
   adxlSetup(); //setupiraj se!
+  
+  bmp085Calibration();
 
   pinMode(2,INPUT_PULLUP);
   attachInterrupt(0, getI, FALLING);
@@ -39,14 +44,18 @@ void loop(){
   digitalWrite(LED,led);
   
   double sX=0, sY=0, sZ=0,i;
-  for(i=1; i<50; i++){
+  for(i=1; i<10; i++){
     adxl.readAccel(&rX, &rY, &rZ);
-    sX+=rX;sY+=rY;
+  //sX+=rX;
+    sY+=rY;
   }
-  X=sX/i;Y=sY/i;
-  Serial.print(X-Xo);Serial.print(" ");
-  Serial.println(Y-Yo);//Serial.print(" ");
+//X=sX/i;
+  Y=sY/i;
+//Serial.print(X-Xo);Serial.print(" ");
+//Serial.println(Y-Yo);//Serial.print(" ");
 //Serial.println(Z);
+
+  temperature = bmp085GetTemperature(bmp085ReadUT());
 
   byte interrupts = adxl.getInterruptSource();
   if(adxl.triggered(interrupts, ADXL345_SINGLE_TAP)){
@@ -59,12 +68,14 @@ void loop(){
 }
 
 void serialEvent(){
+  digitalWrite(LED,0);
   inputString=nullString;
   while(Serial.available()>0){
     inputString+=(char)Serial.read();
     delay(10);
   }
   stringHandle();
+  digitalWrite(LED,1);
 }
 
 void stringHandle(){
@@ -93,7 +104,11 @@ void stringHandle(){
     analogWrite(B,0);
     returnString=inputString;
   }
-  else if(inputString.startsWith("cADXL"))calibrateADXL();
+  else if(inputString.startsWith("cADXL")) calibrateADXL();
+  
+  else if(inputString.startsWith("cBMP085")) bmp085Calibration();
+  
+  else if(inputString.startsWith("getI")) getI();
   
   Serial.println(inputString);
 }
@@ -130,4 +145,5 @@ void calibrateADXL(){
 
 void getI(){
   Serial.println(Y-Yo);
+  Serial.println(temperature, 2);
 }
