@@ -7,7 +7,7 @@ const float alpha = 0.2;
 int rX=0, rY=0, rZ=0;
 int X=0, Y=0, Z=0;
 int Xo=0, Yo=0, Zo=0;
-
+unsigned int t;
 float temperature;
 
 ADXL345 adxl; //ime akcelerometra u kodu
@@ -19,7 +19,7 @@ String inputString="", dataString="", tempString="", nullString="", returnString
 #define L 6 //svjetlno
 #define LED 13
 
-boolean led=0;
+boolean led=0, stupid=1, f=0, b=0;
 
 void setup(){
   Serial.begin(115200);
@@ -43,6 +43,16 @@ void setup(){
 void loop(){
   digitalWrite(LED,led);
   
+  if(stupid){
+    t++;
+    if(t>80){
+      analogWrite(F,0);
+      analogWrite(B,0);
+      f=0,b=0;
+      delay(500);
+      t=0;
+    }
+  }
   double sX=0, sY=0, sZ=0,i;
   for(i=1; i<10; i++){
     adxl.readAccel(&rX, &rY, &rZ);
@@ -68,6 +78,7 @@ void loop(){
 }
 
 void serialEvent(){
+  t=0;
   digitalWrite(LED,0);
   inputString=nullString;
   while(Serial.available()>0){
@@ -80,18 +91,26 @@ void serialEvent(){
 
 void stringHandle(){
   if(inputString.startsWith("F")){
-    analogWrite(B,0);
+    f=1;analogWrite(B,0);
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
+    if(b){
+      Serial.println("delay");
+      delay(500);
+    }
     analogWrite(F,temp);
-    returnString=inputString;
+    b=0;returnString=inputString;
   }
   else if(inputString.startsWith("B")){
-    analogWrite(F,0);
+    b=1;analogWrite(F,0);
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
+    if(f){
+      Serial.println("delay");
+      delay(500);
+    }
     analogWrite(B,temp);
-    returnString=inputString;
+    f=0;returnString=inputString;
   }
   else if(inputString.startsWith("L")){
     tempString=inputString.substring(1,inputString.length());
@@ -100,6 +119,7 @@ void stringHandle(){
     returnString=inputString;
   }
   else if(inputString.startsWith("stop")){
+    f=0,b=0;
     analogWrite(F,0);
     analogWrite(B,0);
     returnString=inputString;
@@ -109,6 +129,8 @@ void stringHandle(){
   else if(inputString.startsWith("cBMP085")) bmp085Calibration();
   
   else if(inputString.startsWith("getI")) getI();
+  
+  else if(inputString.startsWith("notStupid")) stupid=0;
   
   Serial.println(inputString);
 }
@@ -144,6 +166,6 @@ void calibrateADXL(){
 }
 
 void getI(){
-  Serial.println(Y-Yo);
+  Serial.print(Y-Yo);Serial.print(" ");
   Serial.println(temperature, 2);
 }
