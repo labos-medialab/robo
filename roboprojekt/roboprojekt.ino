@@ -19,7 +19,7 @@ String inputString="", dataString="", tempString="", nullString="", returnString
 #define L 6 //svjetlno
 #define LED 13
 
-boolean led=0, stupid=1, f=0, b=0;
+boolean led=0, stupid=1, f=0, b=0, tt=1;
 
 void setup(){
   Serial.begin(115200);
@@ -37,20 +37,20 @@ void setup(){
   
   Serial.println("bok ja sam cjevovdno vozilo");
   Serial.println("imam svjetlo, brzinu i nekalibriranu inklinaciju!");
-  Serial.println("2.0.5");
+  Serial.println("2.0.1");
 }
 
 void loop(){
   digitalWrite(LED,led);
   
-  if(stupid){
+  if(stupid && tt){
     t++;
     if(t>80){
       analogWrite(F,0);
       analogWrite(B,0);
       f=0,b=0;
       delay(500);
-      t=0;
+      t=0; tt=0;
     }
   }
   double sX=0, sY=0, sZ=0,i;
@@ -78,7 +78,7 @@ void loop(){
 }
 
 void serialEvent(){
-  t=0;
+  t=0;tt=1;
   digitalWrite(LED,0);
   inputString=nullString;
   while(Serial.available()>0){
