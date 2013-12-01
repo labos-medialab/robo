@@ -37,7 +37,7 @@ void setup(){
   
   Serial.println("bok ja sam cjevovdno vozilo");
   Serial.println("imam svjetlo, brzinu i nekalibriranu inklinaciju!");
-  Serial.println("2.0.1");
+  Serial.println("2.0.5");
 }
 
 void loop(){
