@@ -10,14 +10,23 @@ int Xo=0, Yo=0, Zo=0;
 unsigned int t;
 float temperature;
 
+int inApin[2] = {7, 4};  // INA: Clockwise input
+int inBpin[2] = {8, 9}; // INB: Counter-clockwise input
+int pwmpin[2] = {5, 6}; // PWM input
+int cspin[2] = {2, 3}; // CS: Current sense ANALOG input
+int enpin[2] = {0, 1}; // EN: Status of switches output (Analog pin)
+
 ADXL345 adxl; //ime akcelerometra u kodu
 
 String inputString="", dataString="", tempString="", nullString="", returnString="none";
 
-#define F 5 //pin za naprije
-#define B 3 //pin za nazad
-#define L 6 //svjetlno
+#define BRAKEVCC 0
+#define CW   1
+#define CCW  2
+#define BRAKEGND 3
+#define CS_THRESHOLD 100
 #define LED 13
+#define L 10
 
 boolean led=0, stupid=1, f=0, b=0, tt=1;
 
@@ -28,7 +37,18 @@ void setup(){
   adxlSetup(); //setupiraj se!
   
   bmp085Calibration();
-
+  
+  for (int i=0; i<2; i++){
+    pinMode(inApin[i], OUTPUT);
+    pinMode(inBpin[i], OUTPUT);
+    pinMode(pwmpin[i], OUTPUT);
+  }
+  
+  for (int i=0; i<2; i++){
+    digitalWrite(inApin[i], LOW);
+    digitalWrite(inBpin[i], LOW);
+  }
+  
   pinMode(2,INPUT_PULLUP);
   attachInterrupt(0, getI, FALLING);
   
@@ -37,7 +57,7 @@ void setup(){
   
   Serial.println("bok ja sam cjevovdno vozilo");
   Serial.println("imam svjetlo, brzinu i nekalibriranu inklinaciju!");
-  Serial.println("2.0.1");
+  Serial.println("2.0.8");
 }
 
 void loop(){
@@ -46,8 +66,8 @@ void loop(){
   if(stupid && tt){
     t++;
     if(t>80){
-      analogWrite(F,0);
-      analogWrite(B,0);
+      motorOff(0);
+      motorOff(1);
       f=0,b=0;
       delay(500);
       t=0; tt=0;
@@ -91,38 +111,43 @@ void serialEvent(){
 
 void stringHandle(){
   if(inputString.startsWith("F")){
-    f=1;analogWrite(B,0);
+    f=1;
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
     if(b){
       Serial.println("delay");
+      motorOff(0);
+      motorOff(1);
       delay(500);
     }
-    analogWrite(F,temp);
-    b=0;returnString=inputString;
+    
+    motorGo(1, CW, temp);
+    motorGo(0, CW, temp);
+    b=0;
   }
   else if(inputString.startsWith("B")){
-    b=1;analogWrite(F,0);
+    b=1;
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
     if(f){
       Serial.println("delay");
+      motorOff(0);
+      motorOff(1);
       delay(500);
     }
-    analogWrite(B,temp);
-    f=0;returnString=inputString;
+    motorGo(0, CCW, temp);
+    motorGo(1, CCW, temp);
+    f=0;
   }
   else if(inputString.startsWith("L")){
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
     analogWrite(L,temp);
-    returnString=inputString;
   }
   else if(inputString.startsWith("stop")){
     f=0,b=0;
-    analogWrite(F,0);
-    analogWrite(B,0);
-    returnString=inputString;
+    motorOff(0);
+    motorOff(1);
   }
   else if(inputString.startsWith("cADXL")) calibrateADXL();
   
@@ -151,6 +176,40 @@ void adxlSetup(){
   
   adxl.setInterrupt(ADXL345_INT_SINGLE_TAP_BIT, 1);
   adxl.setInterrupt(ADXL345_INT_FREE_FALL_BIT, 1);
+}
+
+void motorOff(int motor)
+{
+  // Initialize braked
+  for (int i=0; i<2; i++)
+  {
+    digitalWrite(inApin[i], LOW);
+    digitalWrite(inBpin[i], LOW);
+  }
+  analogWrite(pwmpin[motor], 0);
+}
+
+void motorGo(uint8_t motor, uint8_t direct, uint8_t pwm)
+{
+  if (motor <= 1)
+  {
+    if (direct <=4)
+    {
+      // Set inA[motor]
+      if (direct <=1)
+        digitalWrite(inApin[motor], HIGH);
+      else
+        digitalWrite(inApin[motor], LOW);
+
+      // Set inB[motor]
+      if ((direct==0)||(direct==2))
+        digitalWrite(inBpin[motor], HIGH);
+      else
+        digitalWrite(inBpin[motor], LOW);
+
+      analogWrite(pwmpin[motor], pwm);
+    }
+  }
 }
 
 void calibrateADXL(){
