@@ -57,7 +57,7 @@ void stringHandle(){
 
 void workMode(){
   analogWrite(6,255);
-  analogWrite(red,128);
+  analogWrite(red,100);
   for (int j = zag; j > 0; j--){
     digitalWrite(latchPin, LOW);
     if(j<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
