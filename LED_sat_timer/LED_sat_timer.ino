@@ -22,6 +22,7 @@ void setup(){
 }
 
 void loop(){
+  analogWrite(5,255);
   for (int j = 0; j < 12; j++){
     digitalWrite(latchPin, LOW);
     shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
