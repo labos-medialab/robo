@@ -7,7 +7,7 @@ int latchPin = 8;
 int clockPin = 13;
 int dataPin = 11;
 
-int rad=12, pauza=5;
+int rad=12, pauza=5, zag=3;
 int mode=0;
 
 byte sh[10]={
@@ -55,7 +55,17 @@ void stringHandle(){
 }
 
 void workMode(){
+  analogWrite(6,255);
   analogWrite(red,255);
+  for (int j = zag; j > 0; j--){
+    digitalWrite(latchPin, LOW);
+    if(j<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
+    else shiftOut(dataPin, clockPin, LSBFIRST, sh[j%10]);
+    digitalWrite(latchPin, HIGH);
+    if (Serial.available()>0) break;
+    delay(1000);
+  }
+  analogWrite(6,0);
   for (int j = rad; j > 0; j--){
     digitalWrite(latchPin, LOW);
     if(j<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
