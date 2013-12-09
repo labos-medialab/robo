@@ -1,8 +1,5 @@
-//Pin connected to ST_CP of 74HC595
 int latchPin = 8;
-//Pin connected to SH_CP of 74HC595
 int clockPin = 13;
-////Pin connected to DS of 74HC595
 int dataPin = 11;
 
 byte sh[12]={
