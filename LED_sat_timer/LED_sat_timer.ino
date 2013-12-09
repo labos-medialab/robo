@@ -58,7 +58,8 @@ void workMode(){
   analogWrite(red,255);
   for (int j = rad; j >= 0; j--){
     digitalWrite(latchPin, LOW);
-    shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
+    if(j<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
+    else shiftOut(dataPin, clockPin, LSBFIRST, sh[j%10]);
     digitalWrite(latchPin, HIGH);
     if (Serial.available()>0) break;
     delay(1000);
@@ -67,7 +68,8 @@ void workMode(){
   analogWrite(grn,255);
   for (int j = pauza; j >= 0; j--){
     digitalWrite(latchPin, LOW);
-    shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
+    if(j<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
+    else shiftOut(dataPin, clockPin, LSBFIRST, sh[j%10]);
     digitalWrite(latchPin, HIGH);
     if (Serial.available()>0) break;
     delay(1000);
@@ -81,7 +83,8 @@ void setMode(){
 
 void setRad(){
   digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, LSBFIRST, sh[rad]);
+  if(rad<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[rad]);
+  else shiftOut(dataPin, clockPin, LSBFIRST, sh[rad%10]);
   digitalWrite(latchPin, HIGH);
   analogWrite(red,255);delay(500);
   analogWrite(red,0);delay(500);
@@ -89,7 +92,8 @@ void setRad(){
 
 void setPauza(){
   digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, LSBFIRST, sh[pauza]);
+  if(pauza<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[pauza]);
+  else shiftOut(dataPin, clockPin, LSBFIRST, sh[pauza%10]);
   digitalWrite(latchPin, HIGH);
   analogWrite(grn,255);delay(500);
   analogWrite(grn,0);delay(500);
