@@ -1,6 +1,11 @@
+#define red 5
+#define grn 6
+
 int latchPin = 8;
 int clockPin = 13;
 int dataPin = 11;
+
+int rad=8, pauza=5;
 
 byte sh[10]={
  //87654321 
@@ -23,14 +28,21 @@ void setup(){
 
 void loop(){
   analogWrite(5,255);
-  for (int j = 0; j < 10; j++){
+  for (int j = rad; j >= 0; j--){
     digitalWrite(latchPin, LOW);
     shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
     digitalWrite(latchPin, HIGH);
-    delay(500);
+    delay(1000);
   }
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, LSBFIRST, 0);
-  digitalWrite(latchPin, HIGH);
+  analogWrite(5,0);
+  analogWrite(6,255);
+  for (int j = rad; j >= 0; j--){
+    digitalWrite(latchPin, LOW);
+    shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
+    digitalWrite(latchPin, HIGH);
+    delay(1000);
+  }
+  analogWrite(6,0);
   delay(1000);
-} 
+}
+
