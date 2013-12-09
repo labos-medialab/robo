@@ -78,7 +78,7 @@ void workMode(){
 }
 
 void setMode(){
-  mode++; Serial.println(mode);
+  mode++;
 }
 
 void setRad(){
