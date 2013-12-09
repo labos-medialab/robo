@@ -55,6 +55,7 @@ void workMode(){
     digitalWrite(latchPin, LOW);
     shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
     digitalWrite(latchPin, HIGH);
+    if (Serial.available()>0) break;
     delay(1000);
   }
   analogWrite(red,0);
@@ -63,10 +64,10 @@ void workMode(){
     digitalWrite(latchPin, LOW);
     shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
     digitalWrite(latchPin, HIGH);
+    if (Serial.available()>0) break;
     delay(1000);
   }
   analogWrite(grn,0);
-  delay(1000);
 }
 
 void setMode(){
