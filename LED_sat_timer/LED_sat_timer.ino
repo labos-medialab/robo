@@ -2,7 +2,7 @@ int latchPin = 8;
 int clockPin = 13;
 int dataPin = 11;
 
-byte sh[12]={
+byte sh[10]={
  //87654321 
   B00000001,    //0
   B00000010,    //1
@@ -23,7 +23,7 @@ void setup(){
 
 void loop(){
   analogWrite(5,255);
-  for (int j = 0; j < 12; j++){
+  for (int j = 0; j < 10; j++){
     digitalWrite(latchPin, LOW);
     shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
     digitalWrite(latchPin, HIGH);
