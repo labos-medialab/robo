@@ -34,6 +34,7 @@ void loop(){
   if(mode==0) workMode();
   else if(mode==1) setRad();
   else if(mode==2) setPauza();
+  else if(mode==3) setZag();
   else mode=0;
 }
 
@@ -104,6 +105,15 @@ void setPauza(){
   digitalWrite(latchPin, LOW);
   if(pauza<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[pauza]);
   else shiftOut(dataPin, clockPin, LSBFIRST, sh[pauza%10]);
+  digitalWrite(latchPin, HIGH);
+  analogWrite(grn,255);delay(500);
+  analogWrite(grn,0);delay(500);
+}
+
+void setZag(){
+  digitalWrite(latchPin, LOW);
+  if(zag<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[zag]);
+  else shiftOut(dataPin, clockPin, LSBFIRST, sh[zag%10]);
   digitalWrite(latchPin, HIGH);
   analogWrite(grn,255);delay(500);
   analogWrite(grn,0);delay(500);
