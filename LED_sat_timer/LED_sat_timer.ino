@@ -50,8 +50,8 @@ void stringHandle(){
   if(inputString=="0") setMode();
   if(inputString=="+" && mode==1) rad++;
   if(inputString=="+" && mode==2) pauza++;
-  if(inputString=="-" && mode==1) rad--;
-  if(inputString=="-" && mode==2) pauza--;
+  if(inputString=="-" && mode==1) if(rad>0)rad--;
+  if(inputString=="-" && mode==2) if(pauza>0)pauza--;
 }
 
 void workMode(){
