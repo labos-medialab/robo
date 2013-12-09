@@ -24,6 +24,7 @@ byte sh[10]={
   B01111011};   //9
 
 void setup(){
+  Serial.begin(9600);
   pinMode(latchPin, OUTPUT);
   pinMode(clockPin, OUTPUT);
   pinMode(dataPin, OUTPUT);
