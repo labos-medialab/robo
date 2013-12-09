@@ -36,7 +36,7 @@ void loop(){
   }
   analogWrite(5,0);
   analogWrite(6,255);
-  for (int j = rad; j >= 0; j--){
+  for (int j = pauza; j >= 0; j--){
     digitalWrite(latchPin, LOW);
     shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
     digitalWrite(latchPin, HIGH);
