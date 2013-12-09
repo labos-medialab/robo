@@ -48,6 +48,10 @@ void serialEvent(){
 
 void stringHandle(){
   if(inputString=="0") setMode();
+  if(inputString=="+" && mode==1) rad++;
+  if(inputString=="+" && mode==2) pauza++;
+  if(inputString=="-" && mode==1) rad--;
+  if(inputString=="-" && mode==2) pauza--;
 }
 
 void workMode(){
