@@ -27,6 +27,6 @@ void loop(){
     digitalWrite(latchPin, LOW);
     shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
     digitalWrite(latchPin, HIGH);
-    delay(1000);
+    delay(500);
   }
 } 
