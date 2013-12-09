@@ -6,6 +6,7 @@ int clockPin = 13;
 int dataPin = 11;
 
 int rad=8, pauza=5;
+int mode=0;
 
 byte sh[10]={
  //87654321 
@@ -27,6 +28,10 @@ void setup(){
 }
 
 void loop(){
+  if(mode==0) workMode();
+}
+
+void workMode(){
   analogWrite(5,255);
   for (int j = rad; j >= 0; j--){
     digitalWrite(latchPin, LOW);
@@ -46,3 +51,6 @@ void loop(){
   delay(1000);
 }
 
+void setMode(){
+  
+}
