@@ -1,6 +1,8 @@
 #define red 5
 #define grn 6
 
+String inputString="", dataString="", tempString="", nullString="", returnString="none";
+
 int latchPin = 8;
 int clockPin = 13;
 int dataPin = 11;
@@ -29,7 +31,22 @@ void setup(){
 
 void loop(){
   if(mode==0) workMode();
-  if(mode==1) setRad();
+  else if(mode==1) setRad();
+  else if(mode==2) setPauza();
+  else mode=0;
+}
+
+void serialEvent(){
+  inputString=nullString;
+  while(Serial.available()>0){
+    inputString+=(char)Serial.read();
+    delay(10);
+  }
+  stringHandle();
+}
+
+void stringHandle(){
+  if(inputString=="0") setMode();
 }
 
 void workMode(){
