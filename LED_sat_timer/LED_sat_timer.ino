@@ -29,28 +29,45 @@ void setup(){
 
 void loop(){
   if(mode==0) workMode();
+  if(mode==1) setRad();
 }
 
 void workMode(){
-  analogWrite(5,255);
+  analogWrite(red,255);
   for (int j = rad; j >= 0; j--){
     digitalWrite(latchPin, LOW);
     shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
     digitalWrite(latchPin, HIGH);
     delay(1000);
   }
-  analogWrite(5,0);
-  analogWrite(6,255);
+  analogWrite(red,0);
+  analogWrite(grn,255);
   for (int j = pauza; j >= 0; j--){
     digitalWrite(latchPin, LOW);
     shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
     digitalWrite(latchPin, HIGH);
     delay(1000);
   }
-  analogWrite(6,0);
+  analogWrite(grn,0);
   delay(1000);
 }
 
 void setMode(){
-  
+  mode++;
+}
+
+void setRad(){
+  digitalWrite(latchPin, LOW);
+  shiftOut(dataPin, clockPin, LSBFIRST, sh[rad]);
+  digitalWrite(latchPin, HIGH);
+  analogWrite(red,255);delay(500);
+  analogWrite(red,0);delay(500);
+}
+
+void setPauza(){
+  digitalWrite(latchPin, LOW);
+  shiftOut(dataPin, clockPin, LSBFIRST, sh[pauza]);
+  digitalWrite(latchPin, HIGH);
+  analogWrite(grn,255);delay(500);
+  analogWrite(grn,0);delay(500);
 }
