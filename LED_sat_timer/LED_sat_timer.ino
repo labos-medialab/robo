@@ -54,11 +54,12 @@ void stringHandle(){
   if(inputString=="+" && mode==3) zag++;
   if(inputString=="-" && mode==1) if(rad>0)rad--;
   if(inputString=="-" && mode==2) if(pauza>0)pauza--;
+  if(inputString=="-" && mode==3) if(pauza>0)zag--;
 }
 
 void workMode(){
-  analogWrite(grn,255);
-  analogWrite(red,100);
+  analogWrite(grn,180);
+  analogWrite(red,150);
   for (int j = zag; j >= 0; j--){
     digitalWrite(latchPin, LOW);
     if(j<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
