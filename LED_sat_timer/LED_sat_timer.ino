@@ -58,7 +58,7 @@ void stringHandle(){
 void workMode(){
   analogWrite(6,255);
   analogWrite(red,100);
-  for (int j = zag; j > 0; j--){
+  for (int j = zag; j >= 0; j--){
     digitalWrite(latchPin, LOW);
     if(j<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
     else shiftOut(dataPin, clockPin, LSBFIRST, sh[j%10]);
@@ -67,6 +67,7 @@ void workMode(){
     delay(1000);
   }
   analogWrite(6,0);
+  analogWrite(red,255);
   for (int j = rad; j > 0; j--){
     digitalWrite(latchPin, LOW);
     if(j<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[j]);
