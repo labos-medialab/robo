@@ -7,7 +7,7 @@ const float alpha = 0.2;
 int rX=0, rY=0, rZ=0;
 int X=0, Y=0, Z=0;
 int Xo=0, Yo=0, Zo=0;
-unsigned int t;
+unsigned int t, last=1;
 float temperature;
 
 int inApin[2] = {7, 4};  // INA: Clockwise input
@@ -27,6 +27,7 @@ String inputString="", dataString="", tempString="", nullString="", returnString
 #define CS_THRESHOLD 100
 #define LED 13
 #define L 10
+
 boolean led=0, stupid=1, f=0, b=0, tt=1;
 
 void setup(){
@@ -67,8 +68,8 @@ void loop(){
     t++;
     if(t>80){
       f=0,b=0;
-      motorGo(0, CW, 0);
-      motorGo(1, CW, 0);
+      motorGo(0, last, 0);
+      motorGo(1, last, 0);
       delay(500);
       t=0; tt=0;
     }
@@ -111,31 +112,33 @@ void serialEvent(){
 
 void stringHandle(){
   if(inputString.startsWith("F")){
+    last=CW;
     f=1;
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
     if(b){
       Serial.println("delay");
-      motorGo(0, CW, 0);
-      motorGo(1, CW, 0);
+      motorGo(0, last, 0);
+      motorGo(1, last, 0);
       delay(500);
     }
-    motorGo(0, CW, temp);
-    motorGo(1, CW, temp);
+    motorGo(0, last, temp);
+    motorGo(1, last, temp);
     b=0;
   }
   else if(inputString.startsWith("B")){
+    last=CCW;
     b=1;
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
     if(f){
       Serial.println("delay");
-      motorGo(0, CCW, 0);
-      motorGo(1, CCW, 0);
+      motorGo(0, last, 0);
+      motorGo(1, last, 0);
       delay(500);
     }
-    motorGo(0, CCW, temp);
-    motorGo(1, CCW, temp);
+    motorGo(0, last, temp);
+    motorGo(1, last, temp);
     f=0;
   }
   else if(inputString.startsWith("L")){
@@ -144,8 +147,8 @@ void stringHandle(){
     analogWrite(L,temp);
   }
   else if(inputString.startsWith("stop")){
-    motorGo(0, CW, 0);
-    motorGo(1, CW, 0);
+    motorGo(0, last, 0);
+    motorGo(1, last, 0);
   }
   else if(inputString.startsWith("cADXL")) calibrateADXL();
   
