@@ -112,7 +112,6 @@ void serialEvent(){
 
 void stringHandle(){
   if(inputString.startsWith("F")){
-    last=CW;
     f=1;
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
@@ -122,12 +121,12 @@ void stringHandle(){
       motorGo(1, last, 0);
       delay(500);
     }
+    last=CW;
     motorGo(0, last, temp);
     motorGo(1, last, temp);
     b=0;
   }
   else if(inputString.startsWith("B")){
-    last=CCW;
     b=1;
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
@@ -137,6 +136,7 @@ void stringHandle(){
       motorGo(1, last, 0);
       delay(500);
     }
+    last=CCW;
     motorGo(0, last, temp);
     motorGo(1, last, temp);
     f=0;
@@ -147,6 +147,8 @@ void stringHandle(){
     analogWrite(L,temp);
   }
   else if(inputString.startsWith("stop")){
+    f=0;
+    b=0;
     motorGo(0, last, 0);
     motorGo(1, last, 0);
   }
