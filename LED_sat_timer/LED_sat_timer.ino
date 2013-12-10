@@ -51,12 +51,13 @@ void stringHandle(){
   if(inputString=="0") setMode();
   if(inputString=="+" && mode==1) rad++;
   if(inputString=="+" && mode==2) pauza++;
+  if(inputString=="+" && mode==3) zag++;
   if(inputString=="-" && mode==1) if(rad>0)rad--;
   if(inputString=="-" && mode==2) if(pauza>0)pauza--;
 }
 
 void workMode(){
-  analogWrite(6,255);
+  analogWrite(grn,255);
   analogWrite(red,100);
   for (int j = zag; j >= 0; j--){
     digitalWrite(latchPin, LOW);
@@ -66,7 +67,7 @@ void workMode(){
     if (Serial.available()>0) break;
     delay(1000);
   }
-  analogWrite(6,0);
+  analogWrite(grn,0);
   analogWrite(red,255);
   for (int j = rad; j > 0; j--){
     digitalWrite(latchPin, LOW);
