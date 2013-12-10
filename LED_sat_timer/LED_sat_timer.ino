@@ -7,7 +7,7 @@ int latchPin = 8;
 int clockPin = 13;
 int dataPin = 11;
 
-int rad=12, pauza=5, zag=3;
+int rad=8, pauza=5, zag=3;
 int mode=0;
 
 byte sh[10]={
