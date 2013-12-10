@@ -21,13 +21,12 @@ ADXL345 adxl; //ime akcelerometra u kodu
 String inputString="", dataString="", tempString="", nullString="", returnString="none";
 
 #define BRAKEVCC 0
-#define CW   1
-#define CCW  2
+#define CW   2
+#define CCW  1
 #define BRAKEGND 3
 #define CS_THRESHOLD 100
 #define LED 13
 #define L 10
-
 boolean led=0, stupid=1, f=0, b=0, tt=1;
 
 void setup(){
@@ -56,8 +55,9 @@ void setup(){
   digitalWrite(4,0);
   
   Serial.println("bok ja sam cjevovdno vozilo");
-  Serial.println("imam svjetlo, brzinu i nekalibriranu inklinaciju!");
-  Serial.println("2.0.8");
+  Serial.println("imam svjetlo, inklinaciju, i ");
+  Serial.println("vozim motore preko glupavog shilda");
+  Serial.println("2.0.9");
 }
 
 void loop(){
@@ -66,9 +66,9 @@ void loop(){
   if(stupid && tt){
     t++;
     if(t>80){
-      motorOff(0);
-      motorOff(1);
       f=0,b=0;
+      motorGo(0, CW, 0);
+      motorGo(1, CW, 0);
       delay(500);
       t=0; tt=0;
     }
@@ -116,13 +116,12 @@ void stringHandle(){
     int temp = tempString.toInt();
     if(b){
       Serial.println("delay");
-      motorOff(0);
-      motorOff(1);
+      motorGo(0, CW, 0);
+      motorGo(1, CW, 0);
       delay(500);
     }
-    
-    motorGo(1, CW, temp);
     motorGo(0, CW, temp);
+    motorGo(1, CW, temp);
     b=0;
   }
   else if(inputString.startsWith("B")){
@@ -131,8 +130,8 @@ void stringHandle(){
     int temp = tempString.toInt();
     if(f){
       Serial.println("delay");
-      motorOff(0);
-      motorOff(1);
+      motorGo(0, CCW, 0);
+      motorGo(1, CCW, 0);
       delay(500);
     }
     motorGo(0, CCW, temp);
@@ -145,9 +144,8 @@ void stringHandle(){
     analogWrite(L,temp);
   }
   else if(inputString.startsWith("stop")){
-    f=0,b=0;
-    motorOff(0);
-    motorOff(1);
+    motorGo(0, CW, 0);
+    motorGo(1, CW, 0);
   }
   else if(inputString.startsWith("cADXL")) calibrateADXL();
   
@@ -178,40 +176,6 @@ void adxlSetup(){
   adxl.setInterrupt(ADXL345_INT_FREE_FALL_BIT, 1);
 }
 
-void motorOff(int motor)
-{
-  // Initialize braked
-  for (int i=0; i<2; i++)
-  {
-    digitalWrite(inApin[i], LOW);
-    digitalWrite(inBpin[i], LOW);
-  }
-  analogWrite(pwmpin[motor], 0);
-}
-
-void motorGo(uint8_t motor, uint8_t direct, uint8_t pwm)
-{
-  if (motor <= 1)
-  {
-    if (direct <=4)
-    {
-      // Set inA[motor]
-      if (direct <=1)
-        digitalWrite(inApin[motor], HIGH);
-      else
-        digitalWrite(inApin[motor], LOW);
-
-      // Set inB[motor]
-      if ((direct==0)||(direct==2))
-        digitalWrite(inBpin[motor], HIGH);
-      else
-        digitalWrite(inBpin[motor], LOW);
-
-      analogWrite(pwmpin[motor], pwm);
-    }
-  }
-}
-
 void calibrateADXL(){
   double sX=0, sY=0, sZ=0, i=0;
   do{
@@ -227,4 +191,19 @@ void calibrateADXL(){
 void getI(){
   Serial.print(Y-Yo);Serial.print(" ");
   Serial.println(temperature, 2);
+}
+
+void motorGo(int motor, int direct, int pwm){
+  if (motor <= 1){
+    if (direct <=4){
+      // Set inA[motor]
+      if (direct <=1) digitalWrite(inApin[motor], HIGH);
+      else digitalWrite(inApin[motor], LOW);
+      // Set inB[motor]
+      if ((direct==0)||(direct==2)) digitalWrite(inBpin[motor], HIGH);
+      else digitalWrite(inBpin[motor], LOW);
+      
+      analogWrite(pwmpin[motor], pwm);
+    }
+  }
 }
