@@ -118,6 +118,10 @@ void setZag(){
   if(zag<=9)shiftOut(dataPin, clockPin, LSBFIRST, sh[zag]);
   else shiftOut(dataPin, clockPin, LSBFIRST, sh[zag%10]);
   digitalWrite(latchPin, HIGH);
-  analogWrite(grn,255);delay(500);
-  analogWrite(grn,0);delay(500);
+  analogWrite(grn,180);
+  analogWrite(red,150);
+  delay(500);
+  analogWrite(grn,0);
+  analogWrite(red,0);
+  delay(500);
 }
