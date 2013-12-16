@@ -67,7 +67,7 @@ void loop(){
   if(stupid && tt){
     t++;
     if(t>80){
-      f=0,b=0;
+      f=0;b=0;
       motorGo(0, last, 0);
       motorGo(1, last, 0);
       delay(500);
@@ -112,9 +112,9 @@ void serialEvent(){
 
 void stringHandle(){
   
-  if(inputString.startsWith("#")){
+  if(inputString.startsWith("#") && inputString.charAt(19)=='*'){
     output=1;
-    Serial.println(inputString.charAt(0));
+    Serial.println(inputString.charAt(18));
   }
   
   else if(inputString.startsWith("F")){
@@ -218,4 +218,10 @@ void motorGo(int motor, int direct, int pwm){
       analogWrite(pwmpin[motor], pwm);
     }
   }
+}
+
+void moveFront(int speed){
+}
+
+void moveBack(int speed){
 }
