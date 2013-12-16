@@ -18,7 +18,7 @@ int enpin[2] = {0, 1}; // EN: Status of switches output (Analog pin)
 
 ADXL345 adxl; //ime akcelerometra u kodu
 
-String inputString="", dataString="", tempString="", nullString="", returnString="none";
+String inputString="", dataString="", tempString="", nullString="", outputString="none";
 
 #define BRAKEVCC 0
 #define CW   2
@@ -28,7 +28,7 @@ String inputString="", dataString="", tempString="", nullString="", returnString
 #define LED 13
 #define L 10
 
-boolean led=0, stupid=1, f=0, b=0, tt=1;
+boolean led=0, stupid=1, f=0, b=0, tt=1, output=0;
 
 void setup(){
   Serial.begin(115200);
@@ -58,7 +58,7 @@ void setup(){
   Serial.println("bok ja sam cjevovdno vozilo");
   Serial.println("imam svjetlo, inklinaciju, i ");
   Serial.println("vozim motore preko glupavog shilda");
-  Serial.println("2.0.9");
+  Serial.println("2.1.0");
 }
 
 void loop(){
@@ -99,7 +99,7 @@ void loop(){
 }
 
 void serialEvent(){
-  t=0;tt=1;
+  t=0;tt=1,output=0;
   digitalWrite(LED,0);
   inputString=nullString;
   while(Serial.available()>0){
@@ -111,7 +111,13 @@ void serialEvent(){
 }
 
 void stringHandle(){
-  if(inputString.startsWith("F")){
+  
+  if(inputString.startsWith("#")){
+    output=1;
+    Serial.println(inputString.charAt(0));
+  }
+  
+  else if(inputString.startsWith("F")){
     f=1;
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
@@ -160,7 +166,8 @@ void stringHandle(){
   
   else if(inputString.startsWith("notStupid")) stupid=0;
   
-  Serial.println(inputString);
+  if(output)Serial.println(outputString);
+  else Serial.println(inputString);
 }
 
 void adxlSetup(){
