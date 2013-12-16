@@ -113,57 +113,36 @@ void serialEvent(){
 void stringHandle(){
   
   if(inputString.startsWith("#") && inputString.charAt(19)=='*'){
+    //#F25500000000000000*
+    if(inputString.charAt(1)=='0') stop();
+    else {
+      tempString=inputString.substring(2,5);
+      int temp = tempString.toInt();
+      if(inputString.charAt(1)=='F') moveFront(temp);
+      else moveBack(temp);
+    }
+    stupid = inputString.charAt(18)-48;
     output=1;
-    Serial.println(inputString.charAt(18));
   }
-  
   else if(inputString.startsWith("F")){
     f=1;
     tempString=inputString.substring(1,inputString.length());
-    int temp = tempString.toInt();
-    if(b){
-      Serial.println("delay");
-      motorGo(0, last, 0);
-      motorGo(1, last, 0);
-      delay(500);
-    }
-    last=CW;
-    motorGo(0, last, temp);
-    motorGo(1, last, temp);
-    b=0;
+    int temp = tempString.toInt(); moveFront(temp);
   }
   else if(inputString.startsWith("B")){
     b=1;
     tempString=inputString.substring(1,inputString.length());
-    int temp = tempString.toInt();
-    if(f){
-      Serial.println("delay");
-      motorGo(0, last, 0);
-      motorGo(1, last, 0);
-      delay(500);
-    }
-    last=CCW;
-    motorGo(0, last, temp);
-    motorGo(1, last, temp);
-    f=0;
+    int temp = tempString.toInt(); moveBack(temp);
   }
   else if(inputString.startsWith("L")){
     tempString=inputString.substring(1,inputString.length());
     int temp = tempString.toInt();
     analogWrite(L,temp);
   }
-  else if(inputString.startsWith("stop")){
-    f=0;
-    b=0;
-    motorGo(0, last, 0);
-    motorGo(1, last, 0);
-  }
+  else if(inputString.startsWith("stop")) stop();
   else if(inputString.startsWith("cADXL")) calibrateADXL();
-  
   else if(inputString.startsWith("cBMP085")) bmp085Calibration();
-  
   else if(inputString.startsWith("getI")) getI();
-  
   else if(inputString.startsWith("notStupid")) stupid=0;
   
   if(output)Serial.println(outputString);
@@ -220,8 +199,34 @@ void motorGo(int motor, int direct, int pwm){
   }
 }
 
+void stop(){
+  f=0;b=0;
+  motorGo(0, last, 0);
+  motorGo(1, last, 0);
+}
+
 void moveFront(int speed){
+  if(b){
+    Serial.println("delay");
+    motorGo(0, last, 0);
+    motorGo(1, last, 0);
+    delay(500);
+  }
+  last=CW;
+  motorGo(0, last, speed);
+  motorGo(1, last, speed);
+  b=0;
 }
 
 void moveBack(int speed){
+  if(f){
+    Serial.println("delay");
+    motorGo(0, last, 0);
+    motorGo(1, last, 0);
+    delay(500);
+  }
+  last=CCW;
+  motorGo(0, last, speed);
+  motorGo(1, last, speed);
+  f=0;
 }
