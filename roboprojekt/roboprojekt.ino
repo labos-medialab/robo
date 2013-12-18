@@ -119,7 +119,7 @@ void stringHandle(){
       tempString=inputString.substring(2,5);
       int temp = tempString.toInt();
       if(inputString.charAt(1)=='F') moveFront(temp);
-      else moveBack(temp);
+      if(inputString.charAt(1)=='B') moveBack(temp);
     }
     stupid = inputString.charAt(18)-48;
     output=1;
