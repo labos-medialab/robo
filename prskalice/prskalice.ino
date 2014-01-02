@@ -34,7 +34,7 @@ void loop(){
     delay(10);
     if(digitalRead(3)==0){
       t++;
-      if(T==8) t=1;
+      if(t==8) t=1;
       tc=t;
       digitalWrite(9, bitRead(tc,2));
       digitalWrite(8, bitRead(tc,1));
