@@ -1,8 +1,6 @@
-#include <Wire.h>
-#include <ADXL345.h> //lib za akcelerometar
-#include <BMP085.h> //lib za tlak i temperaturu
-
-const float alpha = 0.2;
+//#include <Wire.h>
+//#include <ADXL345.h> //lib za akcelerometar
+//#include <BMP085.h> //lib za tlak i temperaturu
 
 int rX=0, rY=0, rZ=0;
 int X=0, Y=0, Z=0;
@@ -16,7 +14,7 @@ int pwmpin[2] = {5, 6}; // PWM input
 int cspin[2] = {2, 3}; // CS: Current sense ANALOG input
 int enpin[2] = {0, 1}; // EN: Status of switches output (Analog pin)
 
-ADXL345 adxl; //ime akcelerometra u kodu
+//ADXL345 adxl; //ime akcelerometra u kodu
 
 String inputString="", dataString="", tempString="", nullString="", outputString="none";
 
@@ -33,10 +31,10 @@ boolean led=0, stupid=1, f=0, b=0, tt=1, output=0;
 void setup(){
   Serial.begin(115200);
   
-  adxl.begin(); //započni akcelerometru!
-  adxlSetup(); //setupiraj se!
+  //adxl.begin(); //započni akcelerometru!
+  //adxlSetup(); //setupiraj se!
   
-  bmp085Calibration();
+  //bmp085Calibration();
   
   for (int i=0; i<2; i++){
     pinMode(inApin[i], OUTPUT);
@@ -59,6 +57,7 @@ void setup(){
   Serial.println("imam svjetlo, inklinaciju, i ");
   Serial.println("vozim motore preko glupavog shilda");
   Serial.println("2.1.0");
+  randomSeed(analogRead(A0));
 }
 
 void loop(){
@@ -76,25 +75,26 @@ void loop(){
   }
   double sX=0, sY=0, sZ=0,i;
   for(i=1; i<10; i++){
-    adxl.readAccel(&rX, &rY, &rZ);
+  //adxl.readAccel(&rX, &rY, &rZ);
   //sX+=rX;
     sY+=rY;
   }
 //X=sX/i;
-  Y=sY/i;
+//Y=sY/i;
+  Y=random(-300,300);
 //Serial.print(X-Xo);Serial.print(" ");
 //Serial.println(Y-Yo);//Serial.print(" ");
 //Serial.println(Z);
 
-  temperature = bmp085GetTemperature(bmp085ReadUT());
+  //temperature = bmp085GetTemperature(bmp085ReadUT());
 
-  byte interrupts = adxl.getInterruptSource();
+  /*byte interrupts = adxl.getInterruptSource();
   if(adxl.triggered(interrupts, ADXL345_SINGLE_TAP)){
     Serial.println("tap");
   }
   if(adxl.triggered(interrupts, ADXL345_FREE_FALL)){
     Serial.println("freefall");
-  }
+  }*/
   led=!led;
 }
 
@@ -140,15 +140,15 @@ void stringHandle(){
     analogWrite(L,temp);
   }
   else if(inputString.startsWith("stop")) stop();
-  else if(inputString.startsWith("cADXL")) calibrateADXL();
-  else if(inputString.startsWith("cBMP085")) bmp085Calibration();
+  //else if(inputString.startsWith("cADXL")) calibrateADXL();
+  //else if(inputString.startsWith("cBMP085")) bmp085Calibration();
   else if(inputString.startsWith("getI")) getI();
   else if(inputString.startsWith("notStupid")) stupid=0;
   
   if(output)Serial.println(outputString);
   else Serial.println(inputString);
 }
-
+/*
 void adxlSetup(){
   adxl.setTapDetectionOnX(1);
   adxl.setTapDetectionOnY(1);
@@ -177,11 +177,11 @@ void calibrateADXL(){
   Xo=sX/i;Yo=sY/i;
   
   //zapiši u eprom
-}
+}*/
 
 void getI(){
-  Serial.print(Y-Yo);Serial.print(" ");
-  Serial.println(temperature, 2);
+  Serial.println(Y-Yo);//Serial.print(" ");
+  //Serial.println(temperature, 2);
 }
 
 void motorGo(int motor, int direct, int pwm){
