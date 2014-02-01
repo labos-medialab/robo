@@ -1,33 +1,8 @@
-/*
-  Arduino Yun Bridge example
-
- This example for the Arduino Yun shows how to use the
- Bridge library to access the digital and analog pins
- on the board through REST calls. It demonstrates how
- you can create your own API when using REST style
- calls through the browser.
-
- Possible commands created in this shetch:
-
- * "/arduino/digital/13"     -> digitalRead(13)
- * "/arduino/digital/13/1"   -> digitalWrite(13, HIGH)
- * "/arduino/analog/2/123"   -> analogWrite(2, 123)
- * "/arduino/analog/2"       -> analogRead(2)
- * "/arduino/mode/13/input"  -> pinMode(13, INPUT)
- * "/arduino/mode/13/output" -> pinMode(13, OUTPUT)
-
- This example code is part of the public domain
-
- http://arduino.cc/en/Tutorial/Bridge
-
- */
 #include <Wire.h>
 #include <Bridge.h>
 #include <YunServer.h>
 #include <YunClient.h>
 
-// Listen on default port 5555, the webserver on the Yun
-// will forward there all the HTTP requests for us.
 YunServer server;
 
 int blinkPin, fadePin, blinkDelay, i;
@@ -35,7 +10,6 @@ int brightness = 0, fadeAmount = 1;
 boolean ledState = 0, fade = 0, blink = 0;
 
 void setup() {
-  // Bridge startup
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);
   Bridge.begin();
@@ -43,9 +17,6 @@ void setup() {
   server.listenOnLocalhost();
   server.begin();
   digitalWrite(13, LOW);
-
-  // Listen for incoming connection only from localhost
-  // (no one from the external network could connect)
 }
 
 void loop() {
@@ -60,23 +31,16 @@ void loop() {
   if(fade){
     analogWrite(fadePin, brightness);
     brightness = brightness + fadeAmount;
-    if (brightness == 0 || brightness == 255) {
+    if (brightness == 0 || brightness == 255){
       fadeAmount = -fadeAmount ;
     }
   }
-  // Get clients coming from server
-  YunClient client = server.accept();
-
-  // There is a new client?
-  if (client) {
-    // Process request
+  YunClient client=server.accept();
+  if (client){
     process(client);
-
-    // Close connection and free resources.
     client.stop();
   }
-
-  delay(10); // Poll every 50ms
+  delay(10);
   i++;
 }
 
