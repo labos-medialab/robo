@@ -21,7 +21,7 @@
  http://arduino.cc/en/Tutorial/Bridge
 
  */
-
+#include <Wire.h>
 #include <Bridge.h>
 #include <YunServer.h>
 #include <YunClient.h>
@@ -39,18 +39,19 @@ void setup() {
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);
   Bridge.begin();
+  Wire.begin();
+  server.listenOnLocalhost();
+  server.begin();
   digitalWrite(13, LOW);
 
   // Listen for incoming connection only from localhost
   // (no one from the external network could connect)
-  server.listenOnLocalhost();
-  server.begin();
 }
 
 void loop() {
 
   if(i<0)i=0;
-  if(i>=blinkDelay && blink){
+  if(blink && i>=blinkDelay){
     ledState=!ledState;
     digitalWrite(blinkPin,ledState);
     i=0;
@@ -108,6 +109,11 @@ void process(YunClient client) {
   if (command == "fade") {
     fadeCommand(client);
   }
+
+  // is "wire" command?
+  if (command == "wire") {
+    wireCommand(client);
+  }
 }
 
 void digitalCommand(YunClient client) {
@@ -131,11 +137,6 @@ void digitalCommand(YunClient client) {
   client.print(pin);
   client.print(F(" set to "));
   client.println(value);
-
-  // Update datastore key with the current pin value
-  String key = "D";
-  key += pin;
-  Bridge.put(key, String(value));
 }
 
 void analogCommand(YunClient client) {
@@ -156,11 +157,6 @@ void analogCommand(YunClient client) {
     client.print(pin);
     client.print(F(" set to analog "));
     client.println(value);
-
-    // Update datastore key with the current pin value
-    String key = "D";
-    key += pin;
-    Bridge.put(key, String(value));
   }
   else {
     // Read analog pin
@@ -171,11 +167,6 @@ void analogCommand(YunClient client) {
     client.print(pin);
     client.print(F(" reads analog "));
     client.println(value);
-
-    // Update datastore key with the current pin value
-    String key = "A";
-    key += pin;
-    Bridge.put(key, String(value));
   }
 }
 
@@ -210,7 +201,6 @@ void modeCommand(YunClient client) {
     client.print(F(" configured as OUTPUT!"));
     return;
   }
-
   client.print(F("error: invalid mode "));
   client.print(mode);
 }
@@ -232,11 +222,6 @@ void blinkCommand(YunClient client) {
   client.print(F("Pin D"));
   client.print(blinkPin);
   client.println(F(" set to blink"));
-
-  // Update datastore key with the current pin value
-  String key = "D";
-  key += blinkPin;
-  Bridge.put(key, String(blinkDelay));
 }
 
 void fadeCommand(YunClient client) {
@@ -248,4 +233,43 @@ void fadeCommand(YunClient client) {
   client.print(fadePin);
   client.println(F(" set to fade"));
   fade=1;
+}
+
+void wireCommand(YunClient client) {
+  byte error;
+  int nDevices = 0, address = client.parseInt();
+  if(address==0){
+    client.print(F("Getting all available addresses:"));
+    for(int i=1; i<127; i++){
+      Wire.beginTransmission(i);
+      error = Wire.endTransmission();
+      if(error==0){
+        if(nDevices==0){
+          client.print(F(" "));
+          client.print(i);
+        }
+        else{
+          client.print(F(", "));
+          client.print(i);
+        }
+        nDevices++;
+      }
+    }
+    if(nDevices == 0) client.print(F(" No I2C devices found\n"));
+    else client.print(F(", done\n"));
+  }
+  else if(client.read() == '/'){
+    String comand = client.readStringUntil('\r');
+    byte l=comand.length(), data[l];
+    for(byte i=0;i<l;i++) data[i]=comand.charAt(i);
+    Wire.beginTransmission(address);
+    Wire.write(data,l);
+    error = Wire.endTransmission();
+    
+    client.print(F("Comand: "));
+    client.print(comand);
+    client.print(F("\nAddress: "));
+    client.println(address);
+    if(error!=0)client.println(F("FAILED!"));
+  }
 }
