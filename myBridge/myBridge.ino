@@ -46,87 +46,54 @@ void loop() {
 
 void process(YunClient client) {
   fade=0; blink=0;
-  // read the command
   String command = client.readStringUntil('/');
-
-  // is "digital" command?
   if (command == "digital") {
     digitalCommand(client);
   }
-
-  // is "analog" command?
   if (command == "analog") {
     analogCommand(client);
   }
-
-  // is "mode" command?
   if (command == "mode") {
     modeCommand(client);
   }
-
-  // is "blink" command?
   if (command == "blink") {
     blinkCommand(client);
   }
-
-  // is "blink" command?
   if (command == "fade") {
     fadeCommand(client);
   }
-
-  // is "wire" command?
   if (command == "wire") {
     wireCommand(client);
   }
 }
 
-void digitalCommand(YunClient client) {
+void digitalCommand(YunClient client){
   int pin, value;
-
-  // Read pin number
   pin = client.parseInt();
-
-  // If the next character is a '/' it means we have an URL
-  // with a value like: "/digital/13/1"
-  if (client.read() == '/') {
+  if (client.read() == '/'){
     value = client.parseInt();
     digitalWrite(pin, value);
   }
-  else {
-    value = digitalRead(pin);
-  }
-
-  // Send feedback to client
+  else value = digitalRead(pin);
   client.print(F("Pin D"));
   client.print(pin);
   client.print(F(" set to "));
   client.println(value);
 }
 
-void analogCommand(YunClient client) {
+void analogCommand(YunClient client){
   int pin, value;
-
-  // Read pin number
   pin = client.parseInt();
-
-  // If the next character is a '/' it means we have an URL
-  // with a value like: "/analog/5/120"
-  if (client.read() == '/') {
-    // Read value and execute command
+  if (client.read() == '/'){
     value = client.parseInt();
     analogWrite(pin, value);
-
-    // Send feedback to client
     client.print(F("Pin D"));
     client.print(pin);
     client.print(F(" set to analog "));
     client.println(value);
   }
-  else {
-    // Read analog pin
+  else{
     value = analogRead(pin);
-
-    // Send feedback to client
     client.print(F("Pin A"));
     client.print(pin);
     client.print(F(" reads analog "));
@@ -136,18 +103,12 @@ void analogCommand(YunClient client) {
 
 void modeCommand(YunClient client) {
   int pin;
-
-  // Read pin number
   pin = client.parseInt();
-
-  // If the next character is not a '/' we have a malformed URL
   if (client.read() != '/') {
     client.println(F("error"));
     return;
   }
-
   String mode = client.readStringUntil('\r');
-
   if (mode == "input") {
     pinMode(pin, INPUT);
     // Send feedback to client
@@ -156,7 +117,6 @@ void modeCommand(YunClient client) {
     client.print(F(" configured as INPUT!"));
     return;
   }
-
   if (mode == "output") {
     pinMode(pin, OUTPUT);
     // Send feedback to client
@@ -169,27 +129,21 @@ void modeCommand(YunClient client) {
   client.print(mode);
 }
 
-void blinkCommand(YunClient client) {
+void blinkCommand(YunClient client){
   blink=1;
   blinkPin = client.parseInt();
-
-  // If the next character is a '/' it means we have an URL
-  // with a value like: "/digital/13/1"
   if (client.read() == '/') {
     blinkDelay = client.parseInt();
   }
   else {
     blinkDelay = 100;
   }
-
-  // Send feedback to client
   client.print(F("Pin D"));
   client.print(blinkPin);
   client.println(F(" set to blink"));
 }
 
-void fadeCommand(YunClient client) {
-  // Read pin number
+void fadeCommand(YunClient client){
   fadePin = client.parseInt();
   brightness = 1;
   if(digitalRead(fadePin)) brightness = 254;
@@ -229,7 +183,6 @@ void wireCommand(YunClient client) {
     Wire.beginTransmission(address);
     Wire.write(data,l);
     error = Wire.endTransmission();
-    
     client.print(F("Comand: "));
     client.print(comand);
     client.print(F("\nAddress: "));
