@@ -1,4 +1,5 @@
 #include <Wire.h>
+#include <SoftwareSerial.h>
 #include <Bridge.h>
 #include <YunServer.h>
 #include <YunClient.h>
@@ -7,7 +8,7 @@ YunServer server;
 
 int blinkPin, fadePin, blinkDelay, i;
 int brightness = 0, fadeAmount = 1;
-boolean ledState = 0, fade = 0, blink = 0;
+//boolean ledState = 0, fade = 0, blink = 0;
 
 void setup() {
   pinMode(13, OUTPUT);
@@ -21,7 +22,7 @@ void setup() {
 
 void loop() {
 
-  if(i<0)i=0;
+/*  if(i<0)i=0;
   if(blink && i>=blinkDelay){
     ledState=!ledState;
     digitalWrite(blinkPin,ledState);
@@ -34,15 +35,16 @@ void loop() {
     if (brightness == 0 || brightness == 255){
       fadeAmount = -fadeAmount ;
     }
-  }
+  }*/
 
   YunClient client=server.accept();
   if (client){
-    int pin, value;
-    fade=0; blink=0;
+    int address;
+    //int pin, value;
+    //fade=0; blink=0;
     char command = client.read();
 
-    if (command == 'd'){
+/*    if (command == 'd'){
       pin = client.parseInt();
       if (client.read() == '/'){
         value = client.parseInt();
@@ -89,13 +91,14 @@ void loop() {
       client.println(fadePin);
       client.println(F("fade"));
       fade=1;
-    }
+    }*/
 
     if (command == 'w'){
       byte error;
-      int nDevices = 0, address = client.parseInt();
+      int nDevices = 0;
+      address = client.parseInt();
       if(address==0){
-        client.print(F("Available addresses:"));
+        client.print(F("Addr:"));
         for(int i=1; i<127; i++){
           Wire.beginTransmission(i);
           error = Wire.endTransmission();
@@ -112,7 +115,7 @@ void loop() {
           }
         }
         if(nDevices == 0)
-        client.print(F(" No I2C devices\n"));
+        client.print(F(" E404"));
       }
       else if(client.read() == '/'){
         String comand = client.readStringUntil('\r');
@@ -127,8 +130,31 @@ void loop() {
         if(error!=0)client.println(F("E404"));
       }
     }
+
+    if(command == 's'){
+      int RX,TX, bps;
+      address = client.parseInt();
+      if(address==1){RX=8; TX=9;}
+      else if(address==2){RX=10; TX=11;}
+      else if(address==3){RX=14; TX=15;}
+      else return;
+      if(client.read() == '/'){
+        bps = client.parseInt();
+        if(bps!=300 && bps!=600 && bps!=1200 &&
+           bps!=2400 && bps!=4800 && bps!=9600 && 
+           bps!=14400 && bps!=19200 && bps!=28800)
+         return;
+      }
+      else return;
+      if(client.read() == '/')
+        String comand = client.readStringUntil('\r');
+      else return;
+      SoftwareSerial mySerial(RX, TX);
+      mySerial.begin(bps);
+      mySerial.end();
+    }
     client.stop();
   }
-  delay(10);
-  i++;
+  delay(50);
+  //i++;
 }
