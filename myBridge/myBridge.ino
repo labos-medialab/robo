@@ -146,12 +146,14 @@ void loop() {
          return;
       }
       else return;
-      if(client.read() == '/')
+      if(client.read() == '/'){
         String comand = client.readStringUntil('\r');
+        SoftwareSerial mySerial(RX, TX);
+        mySerial.begin(bps);
+        mySerial.println(comand);
+        mySerial.end();
+      }
       else return;
-      SoftwareSerial mySerial(RX, TX);
-      mySerial.begin(bps);
-      mySerial.end();
     }
     client.stop();
   }
