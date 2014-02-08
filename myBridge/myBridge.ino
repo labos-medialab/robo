@@ -151,6 +151,8 @@ void loop() {
         SoftwareSerial mySerial(RX, TX);
         mySerial.begin(bps);
         mySerial.println(comand);
+        String ccomand = mySerial.readStringUntil('\r');
+        client.println(ccomand);
         mySerial.end();
       }
       else return;
