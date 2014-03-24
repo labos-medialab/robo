@@ -70,21 +70,24 @@ void Stack::push(int broj){	//push metoda koja meï¿½e na vrh
 }
 
 void Stack::pop(){			//pop metoda koja
-	if(size==capacity/2-1){		//ako je kontejner poluprazan
-		capacity/=2;		//isto sranje ko i sa puï¿½em
-		int *temp;		//na predavanju ï¿½emo pojasnit ï¿½to je viï¿½e moguï¿½e
-		temp = new int [capacity];
-		for(int i=0; i <= size; i++){
-			temp[i]=container[i];
-		}
-		container = new int[capacity];
-		*container=*temp;	
-		delete [] temp;
-	}						
-	container[size]=0;		//legitimno brisanje? neznam, nisam joï¿½ nikad morao brisat element ...
-	size--;				//kad obriï¿½eï¿½ smanji za 1
-	cout << "pop(); " << endl;	//ispis iz fore za lakï¿½e praï¿½enje zbivanja koda... 
-	print_cs();			//printaj to zato jer moraï¿½.
+	if(is_empty()){
+		if(size==capacity/2-1){		//ako je kontejner poluprazan
+			capacity/=2;		//isto sranje ko i sa puï¿½em
+			int *temp;		//na predavanju ï¿½emo pojasnit ï¿½to je viï¿½e moguï¿½e
+			temp = new int [capacity];
+			for(int i=0; i <= size; i++){
+				temp[i]=container[i];
+			}
+			container = new int[capacity];
+			*container=*temp;	
+			delete [] temp;
+		}						
+		container[size]=0;		//legitimno brisanje? neznam, nisam joï¿½ nikad morao brisat element ...
+		size--;				//kad obriï¿½eï¿½ smanji za 1
+		cout << "pop(); " << endl;	//ispis iz fore za lakï¿½e praï¿½enje zbivanja koda... 
+		print_cs();			//printaj to zato jer moraï¿½.
+	}
+	else cout << "nop" << endl;
 }
 
 int& Stack::top(){		//pretty much straight forward
@@ -122,5 +125,6 @@ int main(){
 	S1.push(10);
 	S1.push(51);
 	S1.push(11);
+	S1.pop();S1.pop();S1.pop();S1.pop();
 	return 0;
 }
