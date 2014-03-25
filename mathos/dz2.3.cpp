@@ -7,113 +7,111 @@ protected:
 	int size;
 	int *container;
 public:
-	Stack();			//konstruktor koji se poziva kad je objekt bez parametara
-	Stack(int *brojevi, int n){	//konstruktor koji se poziva kad je 
-					//objekt pozvan nizom sranja i njegovom veliï¿½inom
-		size = n-1;			//size mora bit veliï¿½ina n-1 jer push i pop traï¿½e da je uvijet -1
-		capacity=n;			//minimaln kapacitet je veliï¿½ina. 
-		container = new int [capacity];	//napravi kontejner kapaciteta
-		for(int i = 0; i <= size; i++){	//sve izbrojeva prebaci u kontejner
-			container[i]=brojevi[i];	//for ili do while petljom. ili nekako veï¿½
+	Stack();
+	Stack(int *brojevi, int n){
+		size = n-1;
+		capacity=n;
+		container = new int [capacity];
+		for(int i = 0; i <= size; i++){
+			container[i]=brojevi[i];
 		}
 	};
-	Stack(const Stack& S){				//konstruktor kopije koji uzima objekt klase
-		capacity = S.capacity;			//uzmia njegov kapacitet
-		size = S.size;				//i veliï¿½inu 
-		container = new int [capacity];	//te stvara kontejner kapaciteta
-		for(int i = 0; i <= size; i++){	//i kopira
-			container[i]=S.container[i];//jedan u drugog
+	Stack(const Stack& S){
+		capacity = S.capacity;
+		size = S.size;
+		container = new int [capacity];
+		for(int i = 0; i <= size; i++){
+			container[i]=S.container[i];
 		}
 	};
-	~Stack(){ delete[] container; };	//destruktor alocirane memorije
+
+	Stack kopi(Stack& A, size_t kapacitet, const Stack& B){
+		A.capacity=kapacitet;
+		A.container=new int[capacity];
+		for(int i = 0; i <= B.size; i++){
+			A.container[i]=B.container[i];
+		}
+		return A;
+	};
+
+	~Stack(){ delete[] container; };
 	
-	void push(int broj);			// dodaj na kraj vektora 
-	void pop();				// skini s kraja vektora 
-	int& top();				// funkcija koja vraï¿½a referencu zadnjeg elementa u stogu 
+	void push(int broj);
+	void pop();
+	int& top();
 	
-	void print_S(){				//funkcija printanja stoga
-		for(int i = 0; i <= size; i++){	//nije potrebo ali je simpa :)
+	void print_S(){
+		for(int i = 0; i <= size; i++){
 			cout << container[i] << "\t";
 		}
 		cout << endl << endl;
 	}
-	void print_cs(){		//print creep score (lol XD)
-		cout << "capacity: " << capacity << endl;	//printa kapacitet i veliï¿½inu
-		cout << "size: " << size+1 << endl << endl;	//jer se traï¿½i u zadatku
-	};							//moï¿½e se na viï¿½e naï¿½ina
-	bool is_empty() const; // provjerava je li stog prazan 
+	void print_cs(){
+		cout << "capacity: " << capacity << endl;
+		cout << "size: " << size+1 << endl << endl;
+	};
+	
+	bool is_empty() const;
 };
 
-Stack::Stack(){		//trivijalni konstruktor, tako se zove :)
-	size = -1;	//zaï¿½to minus jedan?! because FUCK YOU! thats why.
-	capacity = 4;	//nekako kontam da su vam na vjeï¿½bama objasnili zaï¿½to -1 ako nisu, objasniï¿½u vam naï¿½ivo
-	container = new int [capacity];	//alociraj contejner veliï¿½ine int kapaciteta.
-	print_cs();		//isprintaj ... netreba to tu.
+Stack::Stack(){
+	size = -1;
+	capacity = 4;
+	container = new int [capacity];
+	print_cs();
 }
 
-void Stack::push(int broj){	//push metoda koja meï¿½e na vrh
-	if(size == capacity-1){	//ako je kontejner pun
-		capacity*=2;		//jebiga ovo je sranje
-		int *temp;			//neznam kako da objasnim
-		temp = new int [capacity];	//na predavanju ï¿½u valjda moï¿½...
-		for(int i=0; i <= size; i++){	//temp je jedna od onih koji se mogu mjenjat ime...
-			temp[i]=container[i];	//bla bla ... :D
-		}
-		container = new int[capacity];
-		*container=*temp;	
-		delete [] temp;
+void Stack::push(int broj){
+	if(size == capacity-1){
+		Stack temp(*this);
+		capacity*=2;
+		*this=kopi(*this, capacity, temp);
 	}
-	size++;					//ali ako nije i ako je prvi elemet onda ï¿½e se prebacit u 0
-	container[size]=broj;			//i onda na vrh meti broj koji si prosljedio
-	cout << "push(" << broj << ");" << endl;//ispis nije potreban ovakav ali mi se sviï¿½a
-	print_cs();				//printaj to zato jer moraï¿½.
+	size++;
+	container[size]=broj;
+	cout << "push(" << broj << ");" << endl;
+	print_cs();
 }
 
-void Stack::pop(){			//pop metoda koja
+void Stack::pop(){
 	if(is_empty()){
-		if(size==capacity/2-1){		//ako je kontejner poluprazan
-			capacity/=2;		//isto sranje ko i sa puï¿½em
-			int *temp;		//na predavanju ï¿½emo pojasnit ï¿½to je viï¿½e moguï¿½e
-			temp = new int [capacity];
-			for(int i=0; i <= size; i++){
-				temp[i]=container[i];
-			}
-			container = new int[capacity];
-			*container=*temp;	
-			delete [] temp;
+		if(size==capacity/2-1){
+			Stack temp2(*this);
+			capacity/=2;
+			*this=kopi(*this, capacity, temp2);
 		}						
-		container[size]=0;		//legitimno brisanje? neznam, nisam joï¿½ nikad morao brisat element ...
-		size--;				//kad obriï¿½eï¿½ smanji za 1
-		cout << "pop(); " << endl;	//ispis iz fore za lakï¿½e praï¿½enje zbivanja koda... 
-		print_cs();			//printaj to zato jer moraï¿½.
+		container[size]=0;
+		size--;
+		cout << "pop(); " << endl;
+		print_cs();
 	}
 	else cout << "nop" << endl;
 }
 
-int& Stack::top(){		//pretty much straight forward
-	cout << "top(); ";	//javi da si ti.
-	return container[size];	//i returnaj zadnjeg s liste
+int& Stack::top(){
+	cout << "top(); ";
+	return container[size];
 }
 
-bool Stack::is_empty() const{		//provjerav jeli ima ï¿½togod u stogu
-	if (size >= 0) return 1;	//ako ima vrati 1
-	else return 0;			//ako nema vrati 0
+bool Stack::is_empty() const{
+	if (size >= 0) return 1;
+	else return 0;
 }
 
 int main(){
 	int n = 7, *nekoliko_brojeva = new int [n]; 
-	nekoliko_brojeva[0]=6;	//deklariram niz i veliï¿½inu niza
-	nekoliko_brojeva[1]=5;	//u prvom redu main() funkicje
-	nekoliko_brojeva[2]=4;	//pa za svaki element
-	nekoliko_brojeva[3]=3;	//dojelim neku broj
-	nekoliko_brojeva[4]=2;	//a mogao sam i for funkcijom
-	nekoliko_brojeva[5]=1;	//ali ovako je jasnije ï¿½to se dogaï¿½a
-	nekoliko_brojeva[6]=0;	//... iako izgleda glupo
-	Stack neki(nekoliko_brojeva, n); //deklaracija nekog objekta, nizom i veliï¿½inom
-	delete [] nekoliko_brojeva;	//brisanje niza nekoliko brojeva
-	neki.print_S();	//printanje tog obrisanog niza iz objekta...
-	neki.pop();neki.pop();neki.pop();	//izbaca nekoliko elemenata iz niza
-	neki.print_S();	//i opet ga printa.
+	nekoliko_brojeva[0]=6;
+	nekoliko_brojeva[1]=5;
+	nekoliko_brojeva[2]=4;
+	nekoliko_brojeva[3]=3;
+	nekoliko_brojeva[4]=2;
+	nekoliko_brojeva[5]=1;
+	nekoliko_brojeva[6]=0;
+	Stack neki(nekoliko_brojeva, n);
+	delete [] nekoliko_brojeva;
+	neki.print_S();
+	neki.pop();neki.pop();neki.pop();
+	neki.print_S();
 	Stack S1;
 	S1.push(21);
 	S1.push(11);
