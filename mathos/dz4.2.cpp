@@ -1,5 +1,4 @@
 ﻿#include <iostream>
-#include <iomanip>
 using namespace std;
 
 float random(float a, float b) {return ((b-a)*((float)rand()/RAND_MAX))+a;}
@@ -214,7 +213,7 @@ ostream& operator<<(ostream& buffer, const matrix& z){
 buffer << endl;
 	for(size_t i=0; i<z.m; i++){
 		for(size_t j=0; j<z.n; j++){
-			buffer << setprecision(4) <<  z.M[i][j]<< "\t";
+			buffer <<  z.M[i][j]<< "\t\t";
 		}
 		buffer << endl;
 	}
