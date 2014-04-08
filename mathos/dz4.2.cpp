@@ -213,7 +213,7 @@ ostream& operator<<(ostream& buffer, const matrix& z){
 buffer << endl;
 	for(size_t i=0; i<z.m; i++){
 		for(size_t j=0; j<z.n; j++){
-			buffer <<  z.M[i][j]<< "\t\t";
+			buffer <<  z.M[i][j]<< "  ";
 		}
 		buffer << endl;
 	}
