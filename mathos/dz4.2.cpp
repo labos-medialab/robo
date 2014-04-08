@@ -231,5 +231,5 @@ int main()
 
 	M1 *= M2;
 	cout << M1 << endl;
-	getc();
+	gets();
 }
