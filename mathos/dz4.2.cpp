@@ -126,8 +126,12 @@ matrix& matrix::operator*=(const matrix& A){
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
-
 	matrix M(this->m, A.n);
+	for(size_t i=0; i<M.m; i++){
+		for(size_t j=0; j<M.n; j++){
+			M.M[i][j]=0;
+		}
+	}
 	for(size_t i=0; i<this->m; i++){
 		for(size_t j=0; j<A.n; j++){
 			for(size_t k=0; k<this->n; k++){
@@ -172,8 +176,12 @@ matrix matrix::operator*(const matrix& A) const{
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
-
 	matrix M(this->m, A.n);
+	for(size_t i=0; i<M.m; i++){
+		for(size_t j=0; j<M.n; j++){
+			M.M[i][j]=0;
+		}
+	}
 	for(size_t i=0; i<this->m; i++){
 		for(size_t j=0; j<A.n; j++){
 			for(size_t k=0; k<this->n; k++){
