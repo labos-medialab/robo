@@ -7,7 +7,7 @@ float random(float a, float b) {return ((b-a)*((float)rand()/RAND_MAX))+a;}
 class matrix
 {
 protected:
-	float **M;
+    float **M;
 	size_t m, n;
 
 public:
@@ -93,7 +93,37 @@ matrix& matrix::operator=(const matrix& A){
 	}
 
 	return *this;
-}
+};
+
+matrix& matrix::operator+=(const matrix& A){
+	if(this->m != A.m || this->n != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
+	matrix M(m, n);
+	for(size_t i=0; i<m; i++){
+		for(size_t j=0; j<n; j++){
+			M.M[i][j]=this->M[i][j]+A.M[i][j];
+		}
+	}
+	*this=M;
+	return *this;
+};
+
+matrix& matrix::operator-=(const matrix& A){
+	if(this->m != A.m || this->n != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
+	matrix M(m, n);
+	for(size_t i=0; i<m; i++){
+		for(size_t j=0; j<n; j++){
+			M.M[i][j]=this->M[i][j]-A.M[i][j];
+		}
+	}
+	*this=M;
+	return *this;
+};
 
 matrix matrix::operator+(const matrix& A) const{
 	if(this->m != A.m || this->n != A.n){
@@ -158,8 +188,10 @@ int main()
 	matrix M3(10, 20);
 
 	cout << "test matrica: " << endl;
-	cout << M1 + M2 << endl;
-	cout << M1*M3 << endl;
+	cout << M1 << endl;
+	cout << M2 << endl;
+	M1-=M2;
+	cout << M1 << endl;
 	int i = 3, j = 4;
 	cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl;
 }
