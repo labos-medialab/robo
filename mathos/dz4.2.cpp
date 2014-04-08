@@ -8,7 +8,7 @@ class matrix
 {
 protected:
     float **M;
-	size_t m, n;
+    size_t m, n;
 
 public:
 	matrix();
@@ -34,9 +34,6 @@ public:
 	float* operator[](const size_t i) {return M[i];};
 	
 	friend ostream& operator<<(ostream& buffer, const matrix& z);
-
-	//ispis matricve
-	void ispisMatrice();
 };
 
 matrix::matrix(size_t m, size_t n){
@@ -125,6 +122,24 @@ matrix& matrix::operator-=(const matrix& A){
 	return *this;
 };
 
+matrix& matrix::operator*=(const matrix& A){
+	if(this->m != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
+
+	matrix M(this->m, A.n);
+	for(size_t i=0; i<this->m; i++){
+		for(size_t j=0; j<A.n; j++){
+			for(size_t k=0; k<this->n; k++){
+				M.M[i][j]+=this->M[i][k]*A.M[k][j];
+			}
+		}
+	}
+	*this=M;
+	return *this;
+};
+
 matrix matrix::operator+(const matrix& A) const{
 	if(this->m != A.m || this->n != A.n){
 		cout << "lol NOUP!" << endl;
@@ -169,6 +184,32 @@ matrix matrix::operator*(const matrix& A) const{
 	}
 };
 
+bool matrix::operator==(const matrix& A) const{
+    if(this->m != A.m || this->n != A.n){
+		return false;
+	}
+    for(size_t i=0; i<m; i++){
+    	for(size_t j=0; j<n; j++){
+			if(this->M[i][j]!=A.M[i][j])
+                return false;
+		}
+	}
+    return true;
+};
+
+bool matrix::operator!=(const matrix& A) const{
+    if(this->m != A.m || this->n != A.n){
+    	return true;
+	}
+    for(size_t i=0; i<m; i++){
+        for(size_t j=0; j<n; j++){
+			if(this->M[i][j]==A.M[i][j])
+                return false;
+		}
+	}
+    return true;
+};
+
 ostream& operator<<(ostream& buffer, const matrix& z){
 buffer << endl;
 	for(size_t i=0; i<z.m; i++){
@@ -189,9 +230,14 @@ int main()
 
 	cout << "test matrica: " << endl;
 	cout << M1 << endl;
-	cout << M2 << endl;
-	M1-=M2;
+	cout << M3 << endl;
+	M1*=M3;
 	cout << M1 << endl;
+    
+    M1=M2;
+    bool b=M1!=M3;
+    
+    cout << b << endl;
 	int i = 3, j = 4;
 	cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl;
 }
