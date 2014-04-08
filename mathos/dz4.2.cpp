@@ -246,6 +246,9 @@ int main()
 	
 	cout << "matrica M4" << endl << M4;
 	cout << "matrica M5" << endl << M5;
-
-	cout << "M4==M5" << (M4==M5) << endl;
+	cout << "M4==M5 " << (M4==M5) << endl;
+	M5=M1; cout << "M5=M1 " << endl;
+	cout << "M4==M5 " << (M4==M5) << endl;
+	cout << "M4!=M5 " << (M4!=M5) << endl;
+	cout << "M1==M5 " << (M1==M5) << endl;
 }
