@@ -236,7 +236,7 @@ int main()
 	M1-=M2; cout << "M1-=M2" << endl;
 	cout << "matrica M1" << endl << M1;
 	cout << "M1*M3" << endl << M1*M3;
-	M1*=M3; cout << (M1*=M3) << endl; 
+	M1*=M3; cout << "M1*=M2" << endl; 
 	cout << "matrica M1" << endl << M1;
 
 	cout << (M1==M2) << endl;
