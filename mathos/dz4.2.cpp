@@ -17,9 +17,9 @@ public:
 	
 	// operatori pridruzivanja
 	matrix& operator=(const matrix& A);
-//	matrix& operator+=(const matrix& A); 
-//	matrix& operator-=(const matrix& A); 
-//	matrix& operator*=(const matrix& A);
+	matrix& operator+=(const matrix& A); 
+	matrix& operator-=(const matrix& A); 
+	matrix& operator*=(const matrix& A);
 	
 	// aritmeticki operatori
 	matrix operator+(const matrix& A) const;
@@ -31,7 +31,7 @@ public:
 	bool operator!=(const matrix& A) const;
 	
 	// operator pristupa
-	float* operator[](int i);
+	float* operator[](const size_t i) {return M[i];};
 	
 	friend ostream& operator<<(ostream& buffer, const matrix& z);
 
@@ -100,16 +100,13 @@ matrix matrix::operator+(const matrix& A) const{
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
-
-	else {
-		matrix M(m, n);
-		for(size_t i=0; i<m; i++){
-			for(size_t j=0; j<n; j++){
-				M.M[i][j]=this->M[i][j]+A.M[i][j];
-			}
+	matrix M(m, n);
+	for(size_t i=0; i<m; i++){
+		for(size_t j=0; j<n; j++){
+			M.M[i][j]=this->M[i][j]+A.M[i][j];
 		}
-		return M;
 	}
+	return M;
 };
 
 matrix matrix::operator-(const matrix& A) const{
@@ -117,43 +114,52 @@ matrix matrix::operator-(const matrix& A) const{
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
-
-	else {
-		matrix M(m, n);
-		for(size_t i=0; i<m; i++){
-			for(size_t j=0; j<n; j++){
-				M.M[i][j]=this->M[i][j]-A.M[i][j];
-			}
-		}
-		return M;
-	}
-}
-
-void matrix::ispisMatrice(){
+	matrix M(m, n);
 	for(size_t i=0; i<m; i++){
 		for(size_t j=0; j<n; j++){
-			cout << setprecision(4) <<  M[i][j] << "\t";
+			M.M[i][j]=this->M[i][j]-A.M[i][j];
 		}
-		cout << endl;
 	}
-	cout << endl;
+	return M;
 }
 
+matrix matrix::operator*(const matrix& A) const{
+	if(this->m != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
+
+	matrix M(this->m, A.n);
+	for(size_t i=0; i<this->m; i++){
+		for(size_t j=0; j<A.n; j++){
+			for(size_t k=0; k<this->n; k++){
+				M.M[i][j]+=this->M[i][k]*A.M[k][j];
+			}
+		}
+	}
+};
+
+ostream& operator<<(ostream& buffer, const matrix& z){
+buffer << endl;
+	for(size_t i=0; i<z.m; i++){
+		for(size_t j=0; j<z.n; j++){
+			buffer << setprecision(4) <<  z.M[i][j]<< "\t";
+		}
+		buffer << endl;
+	}
+	buffer << endl;
+	return buffer;
+};
 
 int main()
 {
-	matrix M1(5, 5);
-	matrix M2(5, 5);
-	matrix M3(5, 5);
+	matrix M1(20, 10);
+	matrix M2(20, 10);
+	matrix M3(10, 20);
 
-	M3=M1+M2;
-
-	M1.ispisMatrice();
-	M3.ispisMatrice();
-
-/*	cout << "test matrica: " << endl;
-	cout << M1 + M3 << endl;
-	cout << M1*M2 << endl;
+	cout << "test matrica: " << endl;
+	cout << M1 + M2 << endl;
+	cout << M1*M3 << endl;
 	int i = 3, j = 4;
-	cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl;/**/
+	cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl;
 }
