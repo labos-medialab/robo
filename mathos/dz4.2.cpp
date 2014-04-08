@@ -7,8 +7,8 @@ float random(float a, float b) {return ((b-a)*((float)rand()/RAND_MAX))+a;}
 class matrix
 {
 protected:
-	float **M;
-	size_t m, n;
+    float **M;
+    size_t m, n;
 
 public:
 	matrix();
@@ -17,9 +17,9 @@ public:
 	
 	// operatori pridruzivanja
 	matrix& operator=(const matrix& A);
-//	matrix& operator+=(const matrix& A); 
-//	matrix& operator-=(const matrix& A); 
-//	matrix& operator*=(const matrix& A);
+	matrix& operator+=(const matrix& A); 
+	matrix& operator-=(const matrix& A); 
+	matrix& operator*=(const matrix& A);
 	
 	// aritmeticki operatori
 	matrix operator+(const matrix& A) const;
@@ -31,12 +31,9 @@ public:
 	bool operator!=(const matrix& A) const;
 	
 	// operator pristupa
-	float* operator[](int i);
+	float* operator[](const size_t i) {return M[i];};
 	
 	friend ostream& operator<<(ostream& buffer, const matrix& z);
-
-	//ispis matricve
-	void ispisMatrice();
 };
 
 matrix::matrix(size_t m, size_t n){
@@ -93,23 +90,68 @@ matrix& matrix::operator=(const matrix& A){
 	}
 
 	return *this;
-}
+};
+
+matrix& matrix::operator+=(const matrix& A){
+	if(this->m != A.m || this->n != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
+	matrix M(m, n);
+	for(size_t i=0; i<m; i++){
+		for(size_t j=0; j<n; j++){
+			M.M[i][j]=this->M[i][j]+A.M[i][j];
+		}
+	}
+	*this=M;
+	return *this;
+};
+
+matrix& matrix::operator-=(const matrix& A){
+	if(this->m != A.m || this->n != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
+	matrix M(m, n);
+	for(size_t i=0; i<m; i++){
+		for(size_t j=0; j<n; j++){
+			M.M[i][j]=this->M[i][j]-A.M[i][j];
+		}
+	}
+	*this=M;
+	return *this;
+};
+
+matrix& matrix::operator*=(const matrix& A){
+	if(this->m != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
+
+	matrix M(this->m, A.n);
+	for(size_t i=0; i<this->m; i++){
+		for(size_t j=0; j<A.n; j++){
+			for(size_t k=0; k<this->n; k++){
+				M.M[i][j]+=this->M[i][k]*A.M[k][j];
+			}
+		}
+	}
+	*this=M;
+	return *this;
+};
 
 matrix matrix::operator+(const matrix& A) const{
 	if(this->m != A.m || this->n != A.n){
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
-
-	else {
-		matrix M(m, n);
-		for(size_t i=0; i<m; i++){
-			for(size_t j=0; j<n; j++){
-				M.M[i][j]=this->M[i][j]+A.M[i][j];
-			}
+	matrix M(m, n);
+	for(size_t i=0; i<m; i++){
+		for(size_t j=0; j<n; j++){
+			M.M[i][j]=this->M[i][j]+A.M[i][j];
 		}
-		return M;
 	}
+	return M;
 };
 
 matrix matrix::operator-(const matrix& A) const{
@@ -117,43 +159,83 @@ matrix matrix::operator-(const matrix& A) const{
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
-
-	else {
-		matrix M(m, n);
-		for(size_t i=0; i<m; i++){
-			for(size_t j=0; j<n; j++){
-				M.M[i][j]=this->M[i][j]-A.M[i][j];
-			}
-		}
-		return M;
-	}
-}
-
-void matrix::ispisMatrice(){
+	matrix M(m, n);
 	for(size_t i=0; i<m; i++){
 		for(size_t j=0; j<n; j++){
-			cout << setprecision(4) <<  M[i][j] << "\t";
+			M.M[i][j]=this->M[i][j]-A.M[i][j];
 		}
-		cout << endl;
 	}
-	cout << endl;
+	return M;
 }
 
+matrix matrix::operator*(const matrix& A) const{
+	if(this->m != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
+
+	matrix M(this->m, A.n);
+	for(size_t i=0; i<this->m; i++){
+		for(size_t j=0; j<A.n; j++){
+			for(size_t k=0; k<this->n; k++){
+				M.M[i][j]+=this->M[i][k]*A.M[k][j];
+			}
+		}
+	}
+};
+
+bool matrix::operator==(const matrix& A) const{
+    if(this->m != A.m || this->n != A.n){
+		return false;
+	}
+    for(size_t i=0; i<m; i++){
+    	for(size_t j=0; j<n; j++){
+			if(this->M[i][j]!=A.M[i][j])
+                return false;
+		}
+	}
+    return true;
+};
+
+bool matrix::operator!=(const matrix& A) const{
+    if(this->m != A.m || this->n != A.n){
+    	return true;
+	}
+    for(size_t i=0; i<m; i++){
+        for(size_t j=0; j<n; j++){
+			if(this->M[i][j]==A.M[i][j])
+                return false;
+		}
+	}
+    return true;
+};
+
+ostream& operator<<(ostream& buffer, const matrix& z){
+buffer << endl;
+	for(size_t i=0; i<z.m; i++){
+		for(size_t j=0; j<z.n; j++){
+			buffer << setprecision(4) <<  z.M[i][j]<< "\t";
+		}
+		buffer << endl;
+	}
+	buffer << endl;
+	return buffer;
+};
 
 int main()
 {
-	matrix M1(5, 5);
-	matrix M2(5, 5);
-	matrix M3(5, 5);
+	matrix M1(20, 10);
+	matrix M2(20, 10);
+	matrix M3(10, 20);
 
-	M3=M1+M2;
-
-	M1.ispisMatrice();
-	M3.ispisMatrice();
-
-/*	cout << "test matrica: " << endl;
-	cout << M1 + M3 << endl;
-	cout << M1*M2 << endl;
+	cout << "test matrica: " << endl;
+	cout << M1 << endl;
+	cout << M3 << endl;
+	M1*=M3;
+	cout << M1 << endl;
+	M1=M2;
+	bool b=M1!=M3;
+	cout << b << endl;
 	int i = 3, j = 4;
-	cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl;/**/
+	cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl;
 }
