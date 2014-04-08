@@ -236,7 +236,6 @@ int main()
 	M1=M2;
 	bool b=M1!=M3;
 	cout << b << endl;
-	
 	int i = 3, j = 4;
 	cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl;
 }
