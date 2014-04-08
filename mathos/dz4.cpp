@@ -1,180 +1,147 @@
 ﻿#include <iostream>
-
+#include <iomanip>
 using namespace std;
 
-class data
-{
-public:
-   int key;
-   data(){key = 0;};
-   data(int val){ key = val; }
-   void print()
-   {
-       cout << key << " ";
-   }
-};
+float random(float a, float b) {return ((b-a)*((float)rand()/RAND_MAX))+a;}
 
-class node
-{
-public:
-   data d;
-   node* prev;
-   node* next;
-   node();
-   node(data& d, node* prev, node* next)
-   {
-       this->d = d;
-       this->prev = prev;
-       this->next = next;
-   }
-};
-
-node::node(): d(0),prev(NULL),next(NULL)
-{
-}
-
-class DLList
+class matrix
 {
 protected:
-   node* _head;
-   node* _tail;
-public:
-   DLList();
-   DLList(const DLList& d);
-   ~DLList();
-   void push_front(data& d);
-   void push_back(data& d);
+    float **M;
+	size_t m, n;
 
-   void pop_front();
-   void pop_back();
-   void remove(data* ptr_d);
-   void printList();
-   node* head() const;
-   node* tail() const;
+public:
+	matrix();
+	matrix(size_t m, size_t n);
+	matrix(const matrix& A);
+	
+	// operatori pridruzivanja
+	matrix operator=(const matrix& A);
+//	matrix& operator+=(const matrix& A); 
+//	matrix& operator-=(const matrix& A); 
+//	matrix& operator*=(const matrix& A);
+	
+	// aritmeticki operatori
+	matrix operator+(const matrix& A) const;
+	matrix operator-(const matrix& A) const;
+	matrix operator*(const matrix& A) const;
+	
+	// relacijski operatori
+	bool operator==(const matrix& A) const;
+	bool operator!=(const matrix& A) const;
+	
+	// operator pristupa
+	float* operator[](int i);
+	
+	friend ostream& operator<<(ostream& buffer, const matrix& z);
+
+	//ispis matricve
+	void ispisMatrice();
 };
 
-DLList::DLList()
-{
-   _head = NULL;
-   _tail = NULL;
+matrix::matrix(size_t m, size_t n){
+	this->m = m;
+	this->n = n;
+
+	M = new float*[n];
+	for(size_t i=0; i<n; i++)
+		M[i] = new float[m];
+
+	for(size_t i=0; i<n; i++){
+		for(size_t j=0; j<m; j++){
+			M[i][j]=random(100,-100);
+		}
+	}
+};
+
+matrix matrix::operator=(const matrix& A){
+	if(this->m != A.m || this->n != A.n){
+		cout << "lol wut?!" << endl;
+	}
+
+	for(size_t i=0; i<n; i++)
+		delete [] M[i];
+	delete [] M;
+
+	m=A.m;
+	n=A.n;
+
+	M = new float*[n];
+	for(size_t i=0; i<n; i++)
+		M[i] = new float[m];
+
+	for(size_t i=0; i<n; i++){
+		for(size_t j=0; j<m; j++){
+			M[i][j]=A.M[i][j];
+		}
+	}
+
+	return *this;
 }
 
-DLList::~DLList()
-{
-   if(_head)
-   {
-       while(_head)
-       {
-           pop_front();
-       }
-   }
-}
-void DLList::push_front(data& d)
-{
+matrix matrix::operator+(const matrix& A) const{
+	if(this->m != A.m || this->n != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
 
-   node * newNode = new node();
-   newNode->d.key = d.key;
-   newNode->next=_head;
+	matrix M(m, n);
+	for(size_t i=0; i<n; i++){
+		for(size_t j=0; j<m; j++){
+			M.M[i][j]=this->M[i][j]+A.M[i][j];
+		}
+	}
 
-   if(_head != NULL)
-   {
-       _head->prev = newNode;
-   }
-   else
-   {
-       _tail = newNode;
-   }
-   _head = newNode;
-}
+	return M;
+};
 
+matrix matrix::operator-(const matrix& A) const{
+	if(this->m != A.m || this->n != A.n){
+		cout << "lol NOUP!" << endl;
+		return *this;
+	}
 
-void DLList::push_back(data& d)
-{
-   node * newNode = new node();
-   newNode->d.key = d.key;
-   newNode->prev=_tail;
-   if(_tail != NULL)
-   {
-       _tail->next = newNode;
-   }
-   else
-   {
-       _head = newNode;
-   }
-   _tail = newNode;
+	matrix M(m, n);
+	for(size_t i=0; i<n; i++){
+		for(size_t j=0; j<m; j++){
+			M.M[i][j]=this->M[i][j]-A.M[i][j];
+		}
+	}
+
+	return M;
 }
 
+matrix matrix::operator*(const matrix& A) const{
+	if(this->m != A.n){
+		cout << "hahaha NO!!" << endl;
+		return *this;
+	}
+	return *this;
+};
 
-void DLList::pop_front()
-{
-   if(_head->next)
-   {
-       node * tmp = _head;
-       _head = _head->next;
-       _head->prev = NULL;
-       delete tmp;
-   }
-   else if(_head)
-   {
-       node * tmp = _head;
-       _head = NULL;
-       delete tmp;
-   }
+void matrix::ispisMatrice(){
+	for(size_t i=0; i<n; i++){
+		for(size_t j=0; j<m; j++){
+			cout << setprecision(4) <<  M[i][j] << "\t";
+		}
+		cout << endl;
+	}
 }
 
-void DLList::pop_back()
-{
-   if(_tail->prev)
-   {
-       node * tmp = _tail;
-       _tail = _tail->prev;
-       _tail->next = NULL;
-       delete tmp;
-   }
-   else if(_tail)
-   {
-       node * tmp = _tail;
-       _tail = NULL;
-       delete tmp;
-   }
-}
 
-void DLList::printList()
-{
-   if(_head)
-   {
-       node * tmp =_head;
-       while(tmp)
-       {
-           tmp->d.print();
-           tmp = tmp->next;
-       }
-   }
-}
 int main()
 {
-   data d1(5);
-   data d2(4);
-   data d3(-1);
-   data d4(-7);
-   data d5(11);
+	matrix M1(3, 2);
+	matrix M2(20, 10);
+	matrix M3(5, 5);
 
-   DLList L;
-   L.push_front(d1);
-   L.push_front(d2);
-   L.push_front(d3);
-   L.printList();
-   cout << endl;
+	M3=M1;
 
-   L.push_back(d4);
-   L.push_back(d5);
-   L.printList();
-   cout << endl;
-
-   L.pop_front();
-
-   L.pop_back();
-   L.printList();
-   cout << endl;
-   return 0;
+	M1.ispisMatrice();
+	M3.ispisMatrice();/*
+	cout << "test matrica: " << endl;
+	cout << M1 + M3 << endl;
+	cout << M1*M2 << endl;
+	int i = 3, j = 4;
+	cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl;/**/
 }
