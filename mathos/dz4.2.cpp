@@ -12,7 +12,7 @@ protected:
 public:
     matrix();
     matrix(size_t m, size_t n);
-	matrix(const matrix& A);
+    matrix(const matrix& A);
 	~matrix();
 	
 	// operatori pridruzivanja
@@ -251,4 +251,6 @@ int main()
 	cout << "M4==M5 " << (M4==M5) << endl;
 	cout << "M4!=M5 " << (M4!=M5) << endl;
 	cout << "M1==M5 " << (M1==M5) << endl;
+    cout << "matrica M1" << endl << M1;
+    cout << "matrica M5" << endl << M5;
 }
