@@ -10,9 +10,10 @@ protected:
     size_t m, n;
 
 public:
-	matrix();
-	matrix(size_t m, size_t n);
+    matrix();
+    matrix(size_t m, size_t n);
 	matrix(const matrix& A);
+	~matrix();
 	
 	// operatori pridruzivanja
 	matrix& operator=(const matrix& A);
@@ -65,6 +66,12 @@ matrix::matrix(const matrix& A){
 		}
 	}
 };
+
+matrix::~matrix(){
+	for(size_t i=0; i<m; i++)
+		delete [] M[i];
+	delete [] M;
+}
 
 matrix& matrix::operator=(const matrix& A){
 	for(size_t i=0; i<m; i++)
@@ -215,18 +222,30 @@ ostream& operator<<(ostream& buffer, const matrix& z){
 
 int main()
 {
-	matrix M1(5, 3);
-	matrix M2(5, 3);
-	matrix M3(3, 5);
+	matrix M1(20, 10);
+	matrix M2(20, 10);
+	matrix M3(10, 20);
 	
-	cout << M1;
-	cout << M2;
-	cout << M3;
+	cout << "matrica M1" << endl << M1;
+	cout << "matrica M2" << endl << M2;
+	cout << "matrica M3" << endl << M3;
 	cout << "test matrica: " << endl;
-	cout << M1+M2;
-	cout << M1;
-	cout << M1*M3;
-	M1*=M3;
-	cout << M1;
-	int i = 2, j = 2;		cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl; 
+	cout << "M1+M2" << endl << M1+M2;
+	M1+=M2; cout << "M1+=M2" << endl;
+	cout << "matrica M1" << endl << M1;
+	M1-=M2; cout << "M1-=M2" << endl;
+	cout << "matrica M1" << endl << M1;
+	cout << "M1*M3" << endl << M1*M3;
+	M1*=M3; cout << (M1*=M3) << endl; 
+	cout << "matrica M1" << endl << M1;
+
+	cout << (M1==M2) << endl;
+
+	matrix M4(10,10);
+	matrix M5(M4);
+	
+	cout << "matrica M4" << endl << M4;
+	cout << "matrica M5" << endl << M5;
+
+	cout << "M4==M5" << (M4==M5) << endl;
 }
