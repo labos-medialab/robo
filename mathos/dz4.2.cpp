@@ -67,10 +67,6 @@ matrix::matrix(const matrix& A){
 };
 
 matrix& matrix::operator=(const matrix& A){
-	if(this->m != A.m || this->n != A.n){
-		cout << "lol wut?!" << endl;
-	}
-
 	for(size_t i=0; i<m; i++)
 		delete [] M[i];
 	delete [] M;
@@ -96,13 +92,11 @@ matrix& matrix::operator+=(const matrix& A){
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
-	matrix M(m, n);
 	for(size_t i=0; i<m; i++){
 		for(size_t j=0; j<n; j++){
-			M.M[i][j]=this->M[i][j]+A.M[i][j];
+			this->M[i][j]+=A.M[i][j];
 		}
 	}
-	*this=M;
 	return *this;
 };
 
@@ -111,18 +105,16 @@ matrix& matrix::operator-=(const matrix& A){
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
-	matrix M(m, n);
 	for(size_t i=0; i<m; i++){
 		for(size_t j=0; j<n; j++){
-			M.M[i][j]=this->M[i][j]-A.M[i][j];
+			this->M[i][j]-=A.M[i][j];
 		}
 	}
-	*this=M;
 	return *this;
 };
 
 matrix& matrix::operator*=(const matrix& A){
-	if(this->m != A.n){
+	if(this->n != A.m){
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
@@ -168,7 +160,7 @@ matrix matrix::operator-(const matrix& A) const{
 }
 
 matrix matrix::operator*(const matrix& A) const{
-	if(this->m != A.n){
+	if(this->n != A.m){
 		cout << "lol NOUP!" << endl;
 		return *this;
 	}
@@ -181,6 +173,7 @@ matrix matrix::operator*(const matrix& A) const{
 			}
 		}
 	}
+	return M;
 };
 
 bool matrix::operator==(const matrix& A) const{
@@ -210,7 +203,6 @@ bool matrix::operator!=(const matrix& A) const{
 };
 
 ostream& operator<<(ostream& buffer, const matrix& z){
-buffer << endl;
 	for(size_t i=0; i<z.m; i++){
 		for(size_t j=0; j<z.n; j++){
 			buffer <<  z.M[i][j]<< "  ";
@@ -223,13 +215,18 @@ buffer << endl;
 
 int main()
 {
-	matrix M1(3, 7);
-	matrix M2(7, 5);
-
-	cout << M1 << endl;
-	cout << M2 << endl;
-
-	M1 *= M2;
-	cout << M1 << endl;
-	gets();
+	matrix M1(5, 3);
+	matrix M2(5, 3);
+	matrix M3(3, 5);
+	
+	cout << M1;
+	cout << M2;
+	cout << M3;
+	cout << "test matrica: " << endl;
+	cout << M1+M2;
+	cout << M1;
+	cout << M1*M3;
+	M1*=M3;
+	cout << M1;
+	int i = 2, j = 2;		cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl; 
 }
