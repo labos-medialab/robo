@@ -223,18 +223,13 @@ buffer << endl;
 
 int main()
 {
-	matrix M1(20, 10);
-	matrix M2(20, 10);
-	matrix M3(10, 20);
+	matrix M1(3, 7);
+	matrix M2(7, 5);
 
-	cout << "test matrica: " << endl;
 	cout << M1 << endl;
-	cout << M3 << endl;
-	M1*=M3;
+	cout << M2 << endl;
+
+	M1 *= M2;
 	cout << M1 << endl;
-	M1=M2;
-	bool b=M1!=M3;
-	cout << b << endl;
-	int i = 3, j = 4;
-	cout << "M1[" << i << "][" << j << "] =" << M1[i][j] << endl;
+	getc();
 }
