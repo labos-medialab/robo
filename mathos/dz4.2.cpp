@@ -13,7 +13,7 @@ protected:
 public:
     matrix();
     matrix(size_t m, size_t n);
-	matrix(const matrix& A);
+    matrix(const matrix& A);
 	~matrix();
 	
 	// operatori pridruzivanja
@@ -211,11 +211,11 @@ bool matrix::operator!=(const matrix& A) const{
 	}
     for(size_t i=0; i<m; i++){
         for(size_t j=0; j<n; j++){
-			if(this->M[i][j]==A.M[i][j])
-                return false;
+			if(this->M[i][j]!=A.M[i][j])
+                return true;
 		}
 	}
-    return true;
+    return false;
 };
 
 ostream& operator<<(ostream& buffer, const matrix& z){
