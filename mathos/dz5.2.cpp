@@ -9,7 +9,7 @@ public:
 	Tocka(float x, float y): x(x), y(y){};
 	
 	friend float udaljenost(const Tocka &T1, const Tocka &T2);
-	friend float k(const Tocka &T1, const Tocka &T2);
+	friend float konstanta(const Tocka &T1, const Tocka &T2);
 	friend ostream& operator<<(ostream& buffer, const Tocka& z);
 };
 
@@ -52,7 +52,7 @@ float udaljenost(const Tocka &T1, const Tocka &T2){
 	return sqrt((T2.x-T1.x)*(T2.x-T1.x)+(T2.y-T1.y)*(T2.y-T1.y));
 }
 
-float k(const Tocka &T1, const Tocka &T2){
+float konstanta(const Tocka &T1, const Tocka &T2){
 	if(T1.x == T2.x) return 0;
 	return (T2.y-T1.y)/(T2.x-T1.x);
 }
@@ -102,7 +102,7 @@ float Paralelogram::povrsina() const{
 
 //class Trapez
 bool Trapez::ifis() const{
-	if(k(T1, T2)==k(T3, T4) || k(T3, T2) == k(T1, T4)) return 1;
+	if(konstanta(T1, T2)==konstanta(T3, T4) || konstanta(T3, T2) == konstanta(T1, T4)) return 1;
 	return 0;
 }
 float Trapez::opseg() const{
