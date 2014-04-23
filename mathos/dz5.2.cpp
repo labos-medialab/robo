@@ -17,8 +17,7 @@ class Cetverokut{
 protected:
 	Tocka T1, T2, T3, T4;
 public:
-	Cetverokut(Tocka &T1, Tocka &T2, Tocka &T3, Tocka &T4):
-	  T1(T1), T2(T2), T3(T3), T4(T4){};
+	Cetverokut(Tocka &T1, Tocka &T2, Tocka &T3, Tocka &T4): T1(T1), T2(T2), T3(T3), T4(T4){};
 
 	float opseg() const;
 	float povrsina() const;
@@ -29,8 +28,7 @@ public:
 
 class Paralelogram : public Cetverokut{
 public:
-	Paralelogram(Tocka &T1, Tocka &T2, Tocka &T3, Tocka &T4):
-	  Cetverokut(T1, T2, T3, T4) {};
+	Paralelogram(Tocka &T1, Tocka &T2, Tocka &T3, Tocka &T4): Cetverokut(T1, T2, T3, T4){};
 	
 	float opseg() const;
 	float povrsina() const;
@@ -40,8 +38,7 @@ public:
 
 class Trapez : public Cetverokut{
 public:
-	Trapez(Tocka &T1, Tocka &T2, Tocka &T3, Tocka &T4):
-	  Cetverokut(T1, T2, T3, T4) {};
+	Trapez(Tocka &T1, Tocka &T2, Tocka &T3, Tocka &T4): Cetverokut(T1, T2, T3, T4){};
 	
 	float opseg() const;
 	float povrsina() const;
@@ -55,20 +52,20 @@ float udaljenost(const Tocka &T1, const Tocka &T2){
 	return sqrt((T2.x-T1.x)*(T2.x-T1.x)+(T2.y-T1.y)*(T2.y-T1.y));
 }
 
-float povrsinaTrokuta(const Tocka &T1, const Tocka &T2, const Tocka &T3){
-	float s = (udaljenost(T1,T2)+udaljenost(T2,T3)+udaljenost(T3,T1))/2;
-	return sqrt(s*(s-udaljenost(T1,T2))*(s-udaljenost(T2,T3))*(s-udaljenost(T3,T1)));
-}
-
 float k(const Tocka &T1, const Tocka &T2){
 	if(T1.x == T2.x) return 0;
 	return (T2.y-T1.y)/(T2.x-T1.x);
 }
 
 ostream& operator<<(ostream& buffer, const Tocka& z){
-	return buffer << "T(" << z.x << ", " << z.y << ")" <<  endl;
+	return buffer << "T(" << z.x << ", " << z.y << ") ";
 };
 //frendli fnc, wut?
+
+float povrsinaTrokuta(const Tocka &T1, const Tocka &T2, const Tocka &T3){
+	float s = (udaljenost(T1,T2)+udaljenost(T2,T3)+udaljenost(T3,T1))/2;
+	return sqrt(s*(s-udaljenost(T1,T2))*(s-udaljenost(T2,T3))*(s-udaljenost(T3,T1)));
+}
 
 //class Cetverokut
 bool Cetverokut::ifis() const{
@@ -79,16 +76,10 @@ bool Cetverokut::ifis() const{
 	return 1;
 };
 float Cetverokut::opseg() const{
-	if(ifis()){
-		return udaljenost(T1, T2)+udaljenost(T2, T3)+udaljenost(T3, T4)+udaljenost(T4, T1);
-	}
-	return -1;
+	return udaljenost(T1, T2)+udaljenost(T2, T3)+udaljenost(T3, T4)+udaljenost(T4, T1);
 };
 float Cetverokut::povrsina() const{
-	if(ifis()){
-		return povrsinaTrokuta(T1, T2, T3)+povrsinaTrokuta(T1, T2, T4);
-	}
-	return -1;
+	return povrsinaTrokuta(T1, T2, T3)+povrsinaTrokuta(T1, T2, T4);
 };
 float Cetverokut::ispis() const{
 	cout << T1 << T2 << T3 << T4;
