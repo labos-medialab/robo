@@ -1,118 +1,104 @@
 ﻿#include <iostream>
 #include <cmath>
+
+#define PI 3.14159265
+
 using namespace std;
 
 class Tocka{
 protected:
 	float x, y;
 public:
+	Tocka();
 	Tocka(float x, float y): x(x), y(y){};
 	
 	friend float udaljenost(const Tocka &T1, const Tocka &T2);
-	friend float konstanta(const Tocka &T1, const Tocka &T2);
+	friend float k(const Tocka &T1, const Tocka &T2);
 	friend ostream& operator<<(ostream& buffer, const Tocka& z);
 };
 
-class Cetverokut{
+class Lik{
+public:
+	void status();
+	virtual float povrsina() = 0;
+	virtual float opseg() = 0;	virtual float radiusUpKruz() = 0;};
+
+class Trokut : public Lik{ 
 protected:
-	Tocka T1, T2, T3, T4;
+	Tocka A,B,C;
 public:
-	Cetverokut(Tocka &T1, Tocka &T2, Tocka &T3, Tocka &T4): T1(T1), T2(T2), T3(T3), T4(T4){};
+	Trokut();
+	Trokut::Trokut(Tocka &A, Tocka &B, Tocka &C): A(A),B(B),C(C){};
 
-	float opseg() const;
-	float povrsina() const;
-	float ispis() const;
+	float povrsina(){return sqrt(opseg()/2*(opseg()/2-udaljenost(A,B))*(opseg()/2-udaljenost(B,C))*(opseg()/2-udaljenost(C,A)));};
+	float opseg(){return udaljenost(A,B)+udaljenost(B,C)+udaljenost(C,A);};	float radiusUpKruz(){
+		
+		float k1=k(A,B), k2=k(A,C), fi;
+		if(k2 == -k1) fi = 90;
+		else fi =  atan((k2-k1)/(1+k1*k2))*180/PI;
+		return fi;
+	};
 
-	bool ifis() const;
+	bool isTrokut();
 };
 
-class Paralelogram : public Cetverokut{
+class Krug : public Lik{
+private:
+	Tocka S;
+	float radius;
 public:
-	Paralelogram(Tocka &T1, Tocka &T2, Tocka &T3, Tocka &T4): Cetverokut(T1, T2, T3, T4){};
-	
-	float opseg() const;
-	float povrsina() const;
-
-	bool ifis() const;
+	Krug();
+	Krug(Tocka &S,float r);
 };
 
-class Trapez : public Cetverokut{
+class PravilniPoligon : public Lik{ 
+private:
+	int N;
+	Tocka *vrhovi;
 public:
-	Trapez(Tocka &T1, Tocka &T2, Tocka &T3, Tocka &T4): Cetverokut(T1, T2, T3, T4){};
-	
-	float opseg() const;
-	float povrsina() const;
-
-	bool ifis() const;
+	PravilniPoligon();
+	PravilniPoligon(Tocka *vrhovi, int N);
 };
-//end of lulz
 
-//ok go
+
+void Lik::status(){
+	cout << "Opseg: " << opseg() << endl;
+	cout << "Povrsina: " << povrsina() << endl;
+	cout << "Kut: " << radiusUpKruz() << endl;
+};
+
+//end of classes
+
 float udaljenost(const Tocka &T1, const Tocka &T2){
-	return sqrt((T2.x-T1.x)*(T2.x-T1.x)+(T2.y-T1.y)*(T2.y-T1.y));
-}
-
-float konstanta(const Tocka &T1, const Tocka &T2){
-	if(T1.x == T2.x) return 0;
-	return (T2.y-T1.y)/(T2.x-T1.x);
+	return sqrt((T2.x-T1.x)*(T2.x-T1.x) + (T2.y-T1.y)*(T2.y-T1.y));
 }
 
 ostream& operator<<(ostream& buffer, const Tocka& z){
 	return buffer << "T(" << z.x << ", " << z.y << ") ";
 };
-//frendli fnc, wut?
 
 float povrsinaTrokuta(const Tocka &T1, const Tocka &T2, const Tocka &T3){
 	float s = (udaljenost(T1,T2)+udaljenost(T2,T3)+udaljenost(T3,T1))/2;
 	return sqrt(s*(s-udaljenost(T1,T2))*(s-udaljenost(T2,T3))*(s-udaljenost(T3,T1)));
 }
 
-//class Cetverokut
-bool Cetverokut::ifis() const{
-	if (povrsinaTrokuta(T1, T2, T3) == 0) return 0;
-	if (povrsinaTrokuta(T2, T3, T4) == 0) return 0;
-	if (povrsinaTrokuta(T3, T4, T1) == 0) return 0;
-	if (povrsinaTrokuta(T4, T1, T2) == 0) return 0;
-	return 1;
-};
-float Cetverokut::opseg() const{
-	return udaljenost(T1, T2)+udaljenost(T2, T3)+udaljenost(T3, T4)+udaljenost(T4, T1);
-};
-float Cetverokut::povrsina() const{
-	return povrsinaTrokuta(T1, T2, T3)+povrsinaTrokuta(T1, T2, T4);
-};
-float Cetverokut::ispis() const{
-	cout << T1 << T2 << T3 << T4;
-	return 0;
-};
-//end of cetverokut
+float k(const Tocka &T1, const Tocka &T2){
+	if(T1.x == T2.x) return 0;
+	return (T2.y-T1.y)/(T2.x-T1.x);
+}
 
-//class Paralelogram
-bool Paralelogram::ifis() const{
-	if(udaljenost(T1, T2) == udaljenost(T3, T4) && udaljenost(T1, T4) == udaljenost(T2, T3)) return 1;
-	return 0;
-};
-float Paralelogram::opseg() const{
-	return udaljenost(T1, T2)+udaljenost(T2, T3)+udaljenost(T3, T4)+udaljenost(T4, T1);
+bool Trokut::isTrokut(){
+	if(povrsinaTrokuta(A,B,C)==0) return false;
+	return true;
 }
-float Paralelogram::povrsina() const{
-	return povrsinaTrokuta(T1, T2, T3) * 2;
-};
-//end of paralelogram
-
-//class Trapez
-bool Trapez::ifis() const{
-	if(konstanta(T1, T2)==konstanta(T3, T4) || konstanta(T3, T2) == konstanta(T1, T4)) return 1;
-	return 0;
-}
-float Trapez::opseg() const{
-	return udaljenost(T1, T2)+udaljenost(T2, T3)+udaljenost(T3, T4)+udaljenost(T4, T1);
-}
-float Trapez::povrsina() const{
-	return povrsinaTrokuta(T1, T2, T3)+povrsinaTrokuta(T1, T2, T4);
-};
-//end of trapez
+//\trokut
 
 int main(){
+	Tocka T1(3,0), T2(0,3), T3(8,0);
+	Trokut T(T1,T2,T3);
+	if(T.isTrokut()){
+		T.status();
+	}
+	else cout << "nije trokut" << endl;
 	return 0;
 }
