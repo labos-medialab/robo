@@ -1,16 +1,25 @@
 ﻿#include <iostream>
 #include <cmath>
-
-#define PI 3.14159265
-
 using namespace std;
+
+float PI = 3.14159265;
 
 class Tocka{
 protected:
 	float x, y;
 public:
-	Tocka();
+	Tocka(): x(0), y(0){};
 	Tocka(float x, float y): x(x), y(y){};
+	Tocka(const Tocka& T){
+		this->x=T.x;
+		this->y=T.y;
+	};
+
+	Tocka& operator=(const Tocka& T){
+		this->x=T.x;
+		this->y=T.y;
+		return *this;
+	};
 
 	friend float d(const Tocka &T1, const Tocka &T2);
 	friend float k(const Tocka &T1, const Tocka &T2);
@@ -84,7 +93,46 @@ private:
 	Tocka *vrhovi;
 public:
 	PravilniPoligon();
-	PravilniPoligon(Tocka *vrhovi, int N);
+	PravilniPoligon(Tocka *vrhovi, int N): N(N){
+		this->vrhovi = new Tocka [N];
+		for(int i=0; i<N; i++){
+			this->vrhovi[i]=vrhovi[i];
+		}
+		if(ifPravilni()){
+			for(int i=0; i<N; i++){
+				cout << vrhovi[i];
+			}
+			cout << endl;
+			status();
+		}
+	};
+
+	float povrsina(){
+		float Alfa=PI-(((N-2)*PI)/N);
+		float R=d(vrhovi[0],vrhovi[1])/(2*sin(Alfa/2));
+		return (N/2)*R*R*sin(Alfa);
+	};
+	float opseg(){return N*d(vrhovi[0],vrhovi[1]);};
+	float radiusUpKruz(){return d(vrhovi[0],vrhovi[1])/(2*tan((PI-(((N-2)*PI)/N))/2));};
+
+	bool ifPravilni(){
+		float *a;
+		a = new float [N];
+		for(int i=0; i<N-1; i++){
+			a[i]=d(vrhovi[i],vrhovi[i+1]);
+		}
+		a[N-1]= d(vrhovi[0],vrhovi[N-1]);
+
+		for(int i=0; i<N; i++){
+			for(int j=0; j<N; j++){
+				if(a[i]!=a[j]) return 0;
+			}
+		}
+
+		float FI=((N-2)*PI)/N;
+		//cout << FI << endl;
+		return 1;
+	};
 };
 
 void Lik::status(){
@@ -117,7 +165,7 @@ float r(const Tocka &B, const Tocka &A, const Tocka &C){
 	float s = (a+b+c)/2;
 
 	float k1=k(A,B), k2=k(A,C), fi;
-	if(k2 == -k1) fi = 1.57079633;
+	if(k2 == -k1) fi = PI/2;
 	else {
 		fi = abs(atan((k2-k1)/(1+k1*k2)));
 	}
@@ -143,8 +191,14 @@ bool Trokut::isTrokut(){
 //\trokut
 
 int main(){
-	Tocka T1(0,0), T2(10,15), T3(1,30);
+	Tocka T1(0,0), T2(10,0), T3(10,10), T4(0,10);
 	Trokut T(T1,T2,T3);
 	Krug K(T1, 1);
+
+	int n=4;
+	Tocka *vrsi;
+	vrsi = new Tocka[n];
+	vrsi[0]=T1;vrsi[1]=T2;vrsi[2]=T3;vrsi[3]=T4;
+	PravilniPoligon P(vrsi,n);
 	return 0;
 }
