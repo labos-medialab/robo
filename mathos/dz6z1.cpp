@@ -214,19 +214,17 @@ int main(){
 	vrsi = new Tocka[n];
 	vrsi[0]=T1;vrsi[1]=T2;vrsi[2]=T3;
 	PravilniPoligon P1(vrsi,n);
-
-	
 	int N=6;
-    Tocka * vrhovi;
-	vrhovi = new Tocka [N];
-    vrhovi[0]=Tocka(0,3);
-    vrhovi[1]=Tocka(6,4);
-    vrhovi[2]=Tocka(8.134,9.6962);
-    vrhovi[3]=Tocka(4.2679,14.3923);
-    vrhovi[4]=Tocka(-1.7321,13.3923);
-    vrhovi[5]=Tocka(-3.866,7.6962);
-    
 	
+	Tocka * vrhovi;
+	vrhovi = new Tocka [N];
+	vrhovi[0]=Tocka(0,3);
+	vrhovi[1]=Tocka(6,4);
+	vrhovi[2]=Tocka(8.134,9.6962);
+	vrhovi[3]=Tocka(4.2679,14.3923);
+	vrhovi[4]=Tocka(-1.7321,13.3923);
+	vrhovi[5]=Tocka(-3.866,7.6962);
+
 	PravilniPoligon P(vrhovi,N);
 
 	return 0;
