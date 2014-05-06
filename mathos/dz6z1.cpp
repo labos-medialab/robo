@@ -12,11 +12,7 @@ public:
 	Tocka(float x, float y): x(x), y(y){};
 	Tocka(const Tocka& T): x(T.x), y(T.y){};
 
-	Tocka& operator=(const Tocka& T){
-		this->x=T.x;
-		this->y=T.y;
-		return *this;
-	};
+	Tocka& operator=(const Tocka& T);
 
 	friend float d(const Tocka &T1, const Tocka &T2);
 	friend float phi(const Tocka &T1, const Tocka &T2, const Tocka &T3);
@@ -39,18 +35,11 @@ protected:
 	Tocka A,B,C;
 public:
 	Trokut();
-	Trokut(Tocka &A, Tocka &B, Tocka &C): A(A),B(B),C(C){
-		if(isTrokut()){
-			cout << "Trokut: " << endl;
-			cout << "Vrhovi: "<< A << B << C << endl;
-			status();
-			cout << endl;
-		}
-	};
+	Trokut(Tocka &A, Tocka &B, Tocka &C);
 
-	float povrsina(){return sqrt(opseg()/2*(opseg()/2-d(A,B))*(opseg()/2-d(B,C))*(opseg()/2-d(C,A)));};
-	float opseg(){return d(A,B)+d(B,C)+d(C,A);};
-	float radiusUpKruz(){return 2*povrsina()/opseg();};
+	float Trokut::povrsina();
+	float Trokut::opseg();
+	float Trokut::radiusUpKruz();
 
 	bool isTrokut();
 };
@@ -61,16 +50,11 @@ private:
 	float radius;
 public:
 	Krug();
-	Krug(Tocka &S,float r): S(S), radius(r){
-		cout << "Krug: " << endl;
-		cout << "Srediste: " << S << endl;
-		status();
-		cout << endl;
-	};
+	Krug(Tocka &S,float r);
 
-	float povrsina(){return radius*radius*PI;};
-	float opseg(){return 2*radius*PI;};
-	float radiusUpKruz(){return radius;};
+	float povrsina();
+	float opseg();
+	float radiusUpKruz();
 };
 
 class PravilniPoligon : public Lik{ 
@@ -79,63 +63,15 @@ private:
 	Tocka *vrhovi;
 public:
 	PravilniPoligon();
-	PravilniPoligon(Tocka *vrhovi, int N): N(N){
-		this->vrhovi = new Tocka [N];
-		for(int i=0; i<N; i++){
-			this->vrhovi[i]=vrhovi[i];
-		}
-		if(ifPravilni()){
-			for(int i=0; i<N; i++){
-				cout << vrhovi[i];
-			}
-			cout << endl;
-			status();
-		}
-	};
+	PravilniPoligon(Tocka *vrhovi, int N);
 
 	~PravilniPoligon(){delete [] vrhovi;};
-	float povrsina(){
-		float Alfa=PI-(((N-2)*PI)/N);
-		float R=d(vrhovi[0],vrhovi[1])/(2*sin(Alfa/2));
-		return (N/2)*R*R*sin(Alfa);
-	};
-	float opseg(){return N*d(vrhovi[0],vrhovi[1]);};
-	float radiusUpKruz(){return d(vrhovi[0],vrhovi[1])/(2*tan((PI-(((N-2)*PI)/N))/2));};
 
-	bool ifPravilni(){
-		float *a;
-		a = new float [N];
-		for(int i=0; i<N-1; i++){
-			a[i]=d(vrhovi[i],vrhovi[i+1]);
-		}
-		a[N-1]= d(vrhovi[0],vrhovi[N-1]);
+	float povrsina();
+	float opseg();
+	float radiusUpKruz();
 
-		for(int i=0; i<N; i++){
-			for(int j=0; j<N; j++){
-				if(a[i]!=a[j]) return 0;
-			}
-		}
-
-		float FI=((N-2)*PI)/N;
-		float *fi;
-		fi = new float [N];
-//		cout << FI << endl;
-		for(int i=1; i<N-1; i++){
-			fi[i]=phi(vrhovi[i-1], vrhovi[i], vrhovi[i+1]);
-		}
-		fi[0]=phi(vrhovi[N-1],vrhovi[0],vrhovi[1]);
-		fi[N-1]=phi(vrhovi[N-2],vrhovi[N-1],vrhovi[0]);
-		for(int i=0; i<N; i++){
-			if( fi[i] != FI) return 0;
-		}
-		return 1;
-	};
-};
-
-void Lik::status(){
-	cout << "Opseg: " << opseg() << endl;
-	cout << "Povrsina: " << povrsina() << endl;
-	cout << "Radius: " << radiusUpKruz() << endl;
+	bool ifPravilni();
 };
 
 //end of classes
@@ -162,11 +98,108 @@ float povrsinaTrokuta(const Tocka &T1, const Tocka &T2, const Tocka &T3){
 	return sqrt(s*(s-d(T1,T2))*(s-d(T2,T3))*(s-d(T3,T1)));
 }
 
+//tocka
+Tocka& Tocka::operator=(const Tocka& T){
+		this->x=T.x;
+		this->y=T.y;
+		return *this;
+};
+//\tocka
+
+//lik
+void Lik::status(){
+	cout << "Opseg: " << opseg() << endl;
+	cout << "Povrsina: " << povrsina() << endl;
+	cout << "Radius: " << radiusUpKruz() << endl;
+};
+//\lik
+
+
+//trokut
+Trokut::Trokut(Tocka &A, Tocka &B, Tocka &C): A(A),B(B),C(C){
+	if(isTrokut()){
+		cout << "Trokut: " << endl;
+		cout << "Vrhovi: "<< A << B << C << endl;
+		status();
+		cout << endl;
+	}
+};
+
+float Trokut::povrsina(){return sqrt(opseg()/2*(opseg()/2-d(A,B))*(opseg()/2-d(B,C))*(opseg()/2-d(C,A)));};
+float Trokut::opseg(){return d(A,B)+d(B,C)+d(C,A);};
+float Trokut::radiusUpKruz(){return 2*povrsina()/opseg();};
+
 bool Trokut::isTrokut(){
 	if(povrsinaTrokuta(A,B,C)==0) return false;
 	return true;
 }
 //\trokut
+
+//krug
+Krug::Krug(Tocka &S,float r): S(S), radius(r){
+	cout << "Krug: " << endl;
+	cout << "Srediste: " << S << endl;
+	status();
+	cout << endl;
+};
+
+float Krug::povrsina(){return radius*radius*PI;};
+float Krug::opseg(){return 2*radius*PI;};
+float Krug::radiusUpKruz(){return radius;};
+//\krug
+
+//poligon
+PravilniPoligon::PravilniPoligon(Tocka *vrhovi, int N): N(N){
+	this->vrhovi = new Tocka [N];
+	for(int i=0; i<N; i++){
+		this->vrhovi[i]=vrhovi[i];
+	}
+	if(ifPravilni()){
+		for(int i=0; i<N; i++){
+			cout << vrhovi[i];
+		}
+		cout << endl;
+		status();
+	}
+};
+
+float  PravilniPoligon::povrsina(){
+	float Alfa=PI-(((N-2)*PI)/N);
+	float R=d(vrhovi[0],vrhovi[1])/(2*sin(Alfa/2));
+	return (N/2)*R*R*sin(Alfa);
+};
+float PravilniPoligon::opseg(){return N*d(vrhovi[0],vrhovi[1]);};
+float PravilniPoligon::radiusUpKruz(){return d(vrhovi[0],vrhovi[1])/(2*tan((PI-(((N-2)*PI)/N))/2));};
+
+bool PravilniPoligon::ifPravilni(){
+	float *a;
+	a = new float [N];
+	for(int i=0; i<N-1; i++){
+		a[i]=d(vrhovi[i],vrhovi[i+1]);
+	}
+	a[N-1]= d(vrhovi[0],vrhovi[N-1]);
+//	for(int i=0; i<N; i++) cout << a[i] << ", " << endl;
+	for(int i=0; i<N; i++){
+		for(int j=0; j<N; j++){
+			if(a[i]!=a[j]) return 0;
+		}
+	}
+	float FI=((N-2)*PI)/N;
+	float *fi;
+	fi = new float [N];
+//	cout << FI << endl;
+	for(int i=1; i<N-1; i++){
+		fi[i]=phi(vrhovi[i-1], vrhovi[i], vrhovi[i+1]);
+	}
+	fi[0]=phi(vrhovi[N-1],vrhovi[0],vrhovi[1]);
+	fi[N-1]=phi(vrhovi[N-2],vrhovi[N-1],vrhovi[0]);
+	for(int i=0; i<N; i++){
+//		cout << fi[i] << endl;
+		if( fi[i] != FI) return 0;
+	}
+	return 1;
+};
+//\poligon
 
 int main(){
 	Tocka T1(0,0), T2(10,0), T3(10,10), T4(0,10);
