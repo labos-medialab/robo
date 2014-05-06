@@ -37,9 +37,9 @@ public:
 	Trokut();
 	Trokut(Tocka &A, Tocka &B, Tocka &C);
 
-	float Trokut::povrsina();
-	float Trokut::opseg();
-	float Trokut::radiusUpKruz();
+	float povrsina();
+	float opseg();
+	float radiusUpKruz();
 
 	bool isTrokut();
 };
