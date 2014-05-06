@@ -86,7 +86,9 @@ float phi(const Tocka &T1, const Tocka &T2, const Tocka &T3){
 	float ab=a_x*b_x+a_y*b_y;
 	float n_a=sqrt(a_x*a_x+a_y*a_y);
 	float n_b=sqrt(b_x*b_x+b_y*b_y);
-	return acos(ab/(n_a*n_b));
+	float fi=acos(ab/(n_a*n_b));
+	if(fi<PI/2) fi=PI-fi;
+	return fi;
 }
 
 ostream& operator<<(ostream& buffer, const Tocka& T){
@@ -100,9 +102,9 @@ float povrsinaTrokuta(const Tocka &T1, const Tocka &T2, const Tocka &T3){
 
 //tocka
 Tocka& Tocka::operator=(const Tocka& T){
-		this->x=T.x;
-		this->y=T.y;
-		return *this;
+	this->x=T.x;
+	this->y=T.y;
+	return *this;
 };
 //\tocka
 
@@ -155,6 +157,7 @@ PravilniPoligon::PravilniPoligon(Tocka *vrhovi, int N): N(N){
 		this->vrhovi[i]=vrhovi[i];
 	}
 	if(ifPravilni()){
+		cout << "PravilniPoligon: " << endl;
 		for(int i=0; i<N; i++){
 			cout << vrhovi[i];
 		}
@@ -181,21 +184,21 @@ bool PravilniPoligon::ifPravilni(){
 //	for(int i=0; i<N; i++) cout << a[i] << ", " << endl;
 	for(int i=0; i<N; i++){
 		for(int j=0; j<N; j++){
-			if(a[i]!=a[j]) return 0;
+			if(abs(a[i]-a[j])>0.001) return 0;
 		}
 	}
 	float FI=((N-2)*PI)/N;
 	float *fi;
 	fi = new float [N];
-//	cout << FI << endl;
+//	cout << FI*180/PI << endl;
 	for(int i=1; i<N-1; i++){
 		fi[i]=phi(vrhovi[i-1], vrhovi[i], vrhovi[i+1]);
 	}
 	fi[0]=phi(vrhovi[N-1],vrhovi[0],vrhovi[1]);
 	fi[N-1]=phi(vrhovi[N-2],vrhovi[N-1],vrhovi[0]);
 	for(int i=0; i<N; i++){
-//		cout << fi[i] << endl;
-		if( fi[i] != FI) return 0;
+//		cout << fi[i]*180/PI << endl;
+		if(abs(fi[i]-FI)>0.001) return 0;
 	}
 	return 1;
 };
@@ -206,10 +209,25 @@ int main(){
 	Trokut T(T1,T2,T3);
 	Krug K(T1, 1);
 
-	int n=4;
+	int n=3;
 	Tocka *vrsi;
 	vrsi = new Tocka[n];
-	vrsi[0]=T1;vrsi[1]=T2;vrsi[2]=T3;vrsi[3]=T4;
-	PravilniPoligon P(vrsi,n);
+	vrsi[0]=T1;vrsi[1]=T2;vrsi[2]=T3;
+	PravilniPoligon P1(vrsi,n);
+
+	
+	int N=6;
+    Tocka * vrhovi;
+	vrhovi = new Tocka [N];
+    vrhovi[0]=*(new Tocka(0,3));
+    vrhovi[1]=*(new Tocka(6,4));
+    vrhovi[2]=*(new Tocka(8.134,9.6962));
+    vrhovi[3]=*(new Tocka(4.2679,14.3923));
+    vrhovi[4]=*(new Tocka(-1.7321,13.3923));
+    vrhovi[5]=*(new Tocka(-3.866,7.6962));
+    
+	
+	PravilniPoligon P(vrhovi,N);
+
 	return 0;
 }
