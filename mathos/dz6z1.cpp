@@ -6,7 +6,7 @@ float PI = 3.14159265;
 
 class Tocka{
 protected:
-	float x, y;
+    float x, y;
 public:
 	Tocka(): x(0), y(0){};
 	Tocka(float x, float y): x(x), y(y){};
@@ -219,12 +219,12 @@ int main(){
 	int N=6;
     Tocka * vrhovi;
 	vrhovi = new Tocka [N];
-    vrhovi[0]=*(new Tocka(0,3));
-    vrhovi[1]=*(new Tocka(6,4));
-    vrhovi[2]=*(new Tocka(8.134,9.6962));
-    vrhovi[3]=*(new Tocka(4.2679,14.3923));
-    vrhovi[4]=*(new Tocka(-1.7321,13.3923));
-    vrhovi[5]=*(new Tocka(-3.866,7.6962));
+    vrhovi[0]=Tocka(0,3);
+    vrhovi[1]=Tocka(6,4);
+    vrhovi[2]=Tocka(8.134,9.6962);
+    vrhovi[3]=Tocka(4.2679,14.3923);
+    vrhovi[4]=Tocka(-1.7321,13.3923);
+    vrhovi[5]=Tocka(-3.866,7.6962);
     
 	
 	PravilniPoligon P(vrhovi,N);
