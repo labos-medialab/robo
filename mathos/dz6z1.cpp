@@ -167,7 +167,7 @@ PravilniPoligon::PravilniPoligon(Tocka *vrhovi, int N): N(N){
 };
 
 float  PravilniPoligon::povrsina(){
-	float Alfa=PI-(((N-2)*PI)/N);
+	float Alfa=2*PI/N;
 	float R=d(vrhovi[0],vrhovi[1])/(2*sin(Alfa/2));
 	return (N/2)*R*R*sin(Alfa);
 };
