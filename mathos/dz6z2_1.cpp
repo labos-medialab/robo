@@ -18,7 +18,8 @@ namespace DenseGraph{
 		
 		bool edge(int v, int w) const;
 		
-		void show() const;	};//clas
+		void show() const;
+	};//clas
 
 	Graph::Graph(int V): Vcnt(V), Ecnt(0){
 		adj = new int[Vcnt*Vcnt];
@@ -26,6 +27,9 @@ namespace DenseGraph{
 	};
 
 	Graph::~Graph(){delete[] adj;};
+
+	int Graph::V() const {return Vcnt};
+	int Graph::E() const {return Ecnt};
 
 	void Graph::insert(int v, int w){
 		if(!edge(v,w)){
@@ -74,7 +78,8 @@ namespace SparseGraph
 		void insert(int v, int w); // ubacivanje novog brida
 		void remove(int v, int w); // brisanje brida 
 		bool edge(int v, int w) const; // provjera postoji li brid izmedju v i w
-		void show() const;	};
+		void show() const;
+	};
 }
     
 int main()
