@@ -179,8 +179,13 @@ bool PravilniPoligon::ifPravilan(){
 };
 
 int main(){
-	Tocka A(0,0) B(5,0) C(0,8);
+	Tocka A(0,0), B(5,0), C(0,8);
 	Trokut T(A,B,C);
+
+	Tocka S(8,6);
+	float r=12.5;
+
+	Krug K(S,r);
 	
 	Tocka * vrhovi;
 	vrhovi = new Tocka [N];
