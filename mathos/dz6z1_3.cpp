@@ -186,9 +186,10 @@ bool PravilniPoligon::ifPravilni(){
 };
 
 int main(){
-	Tocka T1(0,0), T2(10,0), T3(10,10), T4(0,10);
+	Tocka T1(1,1), T2(3,2), T3(4,0);
 	Trokut T(T1,T2,T3);
-	Krug K(T1, 1);
+
+	Krug K(T2,16.2);
 
 	int n=3;
 	Tocka *vrsi;

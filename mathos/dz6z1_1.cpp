@@ -25,6 +25,7 @@ public:
 	virtual float povrsina() = 0;
 	virtual float opseg() = 0;
 	virtual float radiusUpKruz() = 0;
+
 	virtual bool ifPravilan() = 0;
 };
 
@@ -105,14 +106,12 @@ Tocka& Tocka::operator=(const Tocka& T){
 };
 
 void Lik::status(){
-	void status(){
-		if(ifPravilan()){
-			cout << "Opseg: " << opseg() << endl;
-			cout << "Povrsina: " << povrsina() << endl;
-			cout << "Radius: " << radiusUpKruz() << endl;
-		}
-		else cout << "Lik nije ispravan" << endl;
-	};
+	if(ifPravilan()){
+		cout << "Opseg: " << opseg() << endl;
+		cout << "Povrsina: " << povrsina() << endl;
+		cout << "Radius: " << radiusUpKruz() << endl;
+	}
+	else cout << "Lik nije ispravan" << endl;
 };
 
 Trokut::Trokut(Tocka &A, Tocka &B, Tocka &C): A(A),B(B),C(C){};
@@ -187,6 +186,8 @@ int main(){
 
 	Krug K(S,r);
 	
+
+	int N=6;
 	Tocka * vrhovi;
 	vrhovi = new Tocka [N];
 	vrhovi[0]=Tocka(0,3);
