@@ -191,9 +191,9 @@ int main(){
 	vrhovi = new Tocka [N];
 	vrhovi[0]=Tocka(-5,-5);
 	vrhovi[1]=Tocka(5,-5);
-	vrhovi[2]=Tocka(8.134,9.6962);
-	vrhovi[3]=Tocka(4.2679,14.3923);
-	vrhovi[4]=Tocka(-1.7321,13.3923);
+	vrhovi[2]=Tocka(4.5106,8.0902);
+	vrhovi[3]=Tocka(10.3884,0);
+	vrhovi[4]=Tocka(-4.5106,8.0902);
 
 	PravilniPoligon P(vrhovi,N);
 
