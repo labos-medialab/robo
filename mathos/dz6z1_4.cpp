@@ -161,11 +161,14 @@ int main(){
 
 	Lik *L1, *L2, *L3;
 	
-	L1=&P;
-	L1->status();
+	cout << "Poligon" << endl;
+	L1=&P; L1->status(); cout << endl;
 
-	L2=&T;
-	L2->status();
+	cout << "Trokut" << endl;
+	L2=&T; L2->status(); cout << endl;
+
+	cout << "Krug" << endl;
+	L3=&K; L3->status();
 
 	return 0;
 }
