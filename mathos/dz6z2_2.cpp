@@ -80,8 +80,8 @@ int main()
 	G1.show();
 	G1.remove(1,3);
 	G1.show();
-
-/*	SparseGraph::Graph G2(5);
+/*
+	SparseGraph::Graph G2(5);
 	G2.insert(0,1);
 	G2.insert(0,2);
 	G2.insert(1,3);
@@ -90,6 +90,6 @@ int main()
 	G2.show();
 	G2.remove(1,3);
 	G2.show();
-/**/
+*/
 	return 1;
 }
