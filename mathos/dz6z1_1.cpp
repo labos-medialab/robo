@@ -25,6 +25,7 @@ public:
 	virtual float povrsina() = 0;
 	virtual float opseg() = 0;
 	virtual float radiusUpKruz() = 0;
+	virtual bool ifPravilan() = 0;
 };
 
 class Trokut : public Lik{ 
@@ -38,7 +39,7 @@ public:
 	float opseg();
 	float radiusUpKruz();
 
-	bool isTrokut();
+	bool ifPravilan();
 };
 
 class Krug : public Lik{
@@ -52,6 +53,8 @@ public:
 	float povrsina();
 	float opseg();
 	float radiusUpKruz();
+
+	bool ifPravilan();
 };
 
 class PravilniPoligon : public Lik{ 
@@ -68,7 +71,7 @@ public:
 	float opseg();
 	float radiusUpKruz();
 
-	bool ifPravilni();
+	bool ifPravilan();
 };
 
 float d(const Tocka &T1, const Tocka &T2){
@@ -107,47 +110,32 @@ void Lik::status(){
 	cout << "Radius: " << radiusUpKruz() << endl;
 };
 
-Trokut::Trokut(Tocka &A, Tocka &B, Tocka &C): A(A),B(B),C(C){
-	if(isTrokut()){
-		cout << "Trokut: " << endl;
-		cout << "Vrhovi: "<< A << B << C << endl;
-		status();
-		cout << endl;
-	}
-};
+Trokut::Trokut(Tocka &A, Tocka &B, Tocka &C): A(A),B(B),C(C){};
 
 float Trokut::povrsina(){return sqrt(opseg()/2*(opseg()/2-d(A,B))*(opseg()/2-d(B,C))*(opseg()/2-d(C,A)));};
 float Trokut::opseg(){return d(A,B)+d(B,C)+d(C,A);};
 float Trokut::radiusUpKruz(){return 2*povrsina()/opseg();};
 
-bool Trokut::isTrokut(){
+bool Trokut::ifPravilan(){
 	if(povrsinaTrokuta(A,B,C)==0) return false;
 	return true;
 }
 
-Krug::Krug(Tocka &S,float r): S(S), radius(r){
-	cout << "Krug: " << endl;
-	cout << "Srediste: " << S << endl;
-	status();
-	cout << endl;
-};
+Krug::Krug(Tocka &S,float r): S(S), radius(r){};
 
 float Krug::povrsina(){return radius*radius*PI;};
 float Krug::opseg(){return 2*radius*PI;};
 float Krug::radiusUpKruz(){return radius;};
 
+bool Krug::ifPravilan(){
+	if(radius>0) return 1;
+	return 0;
+}
+
 PravilniPoligon::PravilniPoligon(Tocka *vrhovi, int N): N(N){
 	this->vrhovi = new Tocka [N];
 	for(int i=0; i<N; i++){
 		this->vrhovi[i]=vrhovi[i];
-	}
-	if(ifPravilni()){
-		cout << "PravilniPoligon: " << endl;
-		for(int i=0; i<N; i++){
-			cout << vrhovi[i];
-		}
-		cout << endl;
-		status();
 	}
 };
 
@@ -159,7 +147,7 @@ float  PravilniPoligon::povrsina(){
 float PravilniPoligon::opseg(){return N*d(vrhovi[0],vrhovi[1]);};
 float PravilniPoligon::radiusUpKruz(){return d(vrhovi[0],vrhovi[1])/(2*tan((PI-(((N-2)*PI)/N))/2));};
 
-bool PravilniPoligon::ifPravilni(){
+bool PravilniPoligon::ifPravilan(){
 	float *a;
 	a = new float [N];
 	for(int i=0; i<N-1; i++){
