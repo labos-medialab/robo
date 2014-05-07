@@ -160,16 +160,9 @@ int main(){
 	Tocka T1(-5,0), T2(-11,7), T3(10,10), S;
 	Trokut T(T1,T2,T3);
 	
-
 	Krug K(S, 10);
-
-	int n=3;
-	Tocka *vrsi;
-	vrsi = new Tocka[n];
-	vrsi[0]=T1;vrsi[1]=T2;vrsi[2]=T3;
-	PravilniPoligon P1(vrsi,n);
-	int N=6;
 	
+	int N=6;
 	Tocka * vrhovi;
 	vrhovi = new Tocka [N];
 	vrhovi[0]=Tocka(0,3);

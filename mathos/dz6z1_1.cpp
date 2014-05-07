@@ -186,16 +186,14 @@ int main(){
 
 	Krug K(S,r);
 	
-
-	int N=6;
+	int N=5;
 	Tocka * vrhovi;
 	vrhovi = new Tocka [N];
-	vrhovi[0]=Tocka(0,3);
-	vrhovi[1]=Tocka(6,4);
+	vrhovi[0]=Tocka(-5,-5);
+	vrhovi[1]=Tocka(5,-5);
 	vrhovi[2]=Tocka(8.134,9.6962);
 	vrhovi[3]=Tocka(4.2679,14.3923);
 	vrhovi[4]=Tocka(-1.7321,13.3923);
-	vrhovi[5]=Tocka(-3.866,7.6962);
 
 	PravilniPoligon P(vrhovi,N);
 
