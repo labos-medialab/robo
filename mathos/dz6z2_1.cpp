@@ -28,8 +28,8 @@ namespace DenseGraph{
 
 	Graph::~Graph(){delete[] adj;};
 
-	int Graph::V() const {return Vcnt};
-	int Graph::E() const {return Ecnt};
+	int Graph::V() const { return Vcnt; };
+	int Graph::E() const { return Ecnt; };
 
 	void Graph::insert(int v, int w){
 		if(!edge(v,w)){
