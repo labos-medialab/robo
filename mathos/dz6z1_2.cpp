@@ -28,7 +28,7 @@ public:
 	void status(){
 		cout << "Opseg: " << opseg() << endl;
 		cout << "Povrsina: " << povrsina() << endl;
-		cout << "Radius: " << radiusUpKruz() << endl;
+		cout << "Radius: " << radiusUpKruz() << endl << endl;
 	};
 
 	virtual float povrsina() = 0;
@@ -45,8 +45,6 @@ public:
 		if(isTrokut()){
 			cout << "Trokut: " << endl;
 			cout << "Vrhovi: "<< A << B << C << endl;
-			status();
-			cout << endl;
 		}
 	};
 
@@ -70,7 +68,6 @@ public:
 	Krug(Tocka &S,float r): S(S), radius(r){
 		cout << "Krug: " << endl;
 		cout << "Srediste: " << S << endl;
-		status();
 		cout << endl;
 	};
 	
@@ -96,7 +93,6 @@ public:
 				cout << vrhovi[i];
 			}
 			cout << endl;
-			status();
 		}
 	};
 	~PravilniPoligon(){delete [] vrhovi;};
@@ -157,21 +153,28 @@ ostream& operator<<(ostream& buffer, const Tocka& T){
 };
 
 int main(){
+	Lik *L;
 	Tocka T1(-5,0), T2(-11,7), T3(10,10), S;
 	Trokut T(T1,T2,T3);
-	
+	L=&T;
+	L->status();
+
 	Krug K(S, 10);
+	L=&K;
+	L->status();
 	
 	int N=5;
 	Tocka * vrhovi;
 	vrhovi = new Tocka [N];
-	vrhovi[0]=Tocka(0,3);
-	vrhovi[1]=Tocka(6,4);
-	vrhovi[2]=Tocka(8.134,9.6962);
-	vrhovi[3]=Tocka(4.2679,14.3923);
-	vrhovi[4]=Tocka(-1.7321,13.3923);
+	vrhovi[0]=Tocka(2,1);
+	vrhovi[1]=Tocka(5,1);
+	vrhovi[2]=Tocka(5.9271,3.8532);
+	vrhovi[3]=Tocka(3.5,5.6165);
+	vrhovi[4]=Tocka(1.0729,3.8532);
 
 	PravilniPoligon P(vrhovi,N);
+	L=&P;
+	L->status();
 
 	return 0;
 }
