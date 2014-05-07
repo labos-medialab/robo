@@ -71,8 +71,6 @@ public:
 	bool ifPravilni();
 };
 
-//end of classes
-
 float d(const Tocka &T1, const Tocka &T2){
 	return sqrt((T2.x-T1.x)*(T2.x-T1.x) + (T2.y-T1.y)*(T2.y-T1.y));
 }
@@ -97,24 +95,18 @@ float povrsinaTrokuta(const Tocka &T1, const Tocka &T2, const Tocka &T3){
 	return sqrt(s*(s-d(T1,T2))*(s-d(T2,T3))*(s-d(T3,T1)));
 }
 
-//tocka
 Tocka& Tocka::operator=(const Tocka& T){
 	this->x=T.x;
 	this->y=T.y;
 	return *this;
 };
-//\tocka
 
-//lik
 void Lik::status(){
 	cout << "Opseg: " << opseg() << endl;
 	cout << "Povrsina: " << povrsina() << endl;
 	cout << "Radius: " << radiusUpKruz() << endl;
 };
-//\lik
 
-
-//trokut
 Trokut::Trokut(Tocka &A, Tocka &B, Tocka &C): A(A),B(B),C(C){
 	if(isTrokut()){
 		cout << "Trokut: " << endl;
@@ -132,9 +124,7 @@ bool Trokut::isTrokut(){
 	if(povrsinaTrokuta(A,B,C)==0) return false;
 	return true;
 }
-//\trokut
 
-//krug
 Krug::Krug(Tocka &S,float r): S(S), radius(r){
 	cout << "Krug: " << endl;
 	cout << "Srediste: " << S << endl;
@@ -145,9 +135,7 @@ Krug::Krug(Tocka &S,float r): S(S), radius(r){
 float Krug::povrsina(){return radius*radius*PI;};
 float Krug::opseg(){return 2*radius*PI;};
 float Krug::radiusUpKruz(){return radius;};
-//\krug
 
-//poligon
 PravilniPoligon::PravilniPoligon(Tocka *vrhovi, int N): N(N){
 	this->vrhovi = new Tocka [N];
 	for(int i=0; i<N; i++){
@@ -178,7 +166,6 @@ bool PravilniPoligon::ifPravilni(){
 		a[i]=d(vrhovi[i],vrhovi[i+1]);
 	}
 	a[N-1]= d(vrhovi[0],vrhovi[N-1]);
-//	for(int i=0; i<N; i++) cout << a[i] << ", " << endl;
 	for(int i=0; i<N; i++){
 		for(int j=0; j<N; j++){
 			if(abs(a[i]-a[j])>0.001) return 0;
@@ -187,19 +174,16 @@ bool PravilniPoligon::ifPravilni(){
 	float FI=((N-2)*PI)/N;
 	float *fi;
 	fi = new float [N];
-//	cout << FI*180/PI << endl;
 	for(int i=1; i<N-1; i++){
 		fi[i]=phi(vrhovi[i-1], vrhovi[i], vrhovi[i+1]);
 	}
 	fi[0]=phi(vrhovi[N-1],vrhovi[0],vrhovi[1]);
 	fi[N-1]=phi(vrhovi[N-2],vrhovi[N-1],vrhovi[0]);
 	for(int i=0; i<N; i++){
-//		cout << fi[i]*180/PI << endl;
 		if(abs(fi[i]-FI)>0.001) return 0;
 	}
 	return 1;
 };
-//\poligon
 
 int main(){
 	Tocka T1(0,0), T2(10,0), T3(10,10), T4(0,10);
