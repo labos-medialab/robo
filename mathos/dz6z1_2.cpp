@@ -97,13 +97,13 @@ public:
 	};
 	~PravilniPoligon(){delete [] vrhovi;};
 
-	float  PravilniPoligon::povrsina(){
+	float povrsina(){
 		float Alfa=2*PI/N;
 		float R=d(vrhovi[0],vrhovi[1])/(2*sin(Alfa/2));
 		return (N/2)*R*R*sin(Alfa);
 	};
-	float PravilniPoligon::opseg(){ return N*d(vrhovi[0],vrhovi[1]); };
-	float PravilniPoligon::radiusUpKruz(){ return d(vrhovi[0],vrhovi[1])/(2*tan((PI-(((N-2)*PI)/N))/2)); };
+	float opseg(){ return N*d(vrhovi[0],vrhovi[1]); };
+	float radiusUpKruz(){ return d(vrhovi[0],vrhovi[1])/(2*tan((PI-(((N-2)*PI)/N))/2)); };
 	bool PravilniPoligon::ifPravilni(){
 		float *a;
 		a = new float [N];
