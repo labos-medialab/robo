@@ -55,8 +55,9 @@ public:
 	float radiusUpKruz(){ return 2*povrsina()/opseg(); };
 
 	bool isTrokut(){
-		if(povrsinaTrokuta(A,B,C)==0) return false;
-		return true;
+		float s = (d(A,B)+d(B,C)+d(C,A))/2;
+		if(sqrt(s*(s-d(A,B))*(s-d(B,C))*(s-d(C,A)))==0) return 0;
+		return 1;
 	};
 };
 
@@ -154,11 +155,6 @@ float phi(const Tocka &T1, const Tocka &T2, const Tocka &T3){
 ostream& operator<<(ostream& buffer, const Tocka& T){
 	return buffer << "T(" << T.x << ", " << T.y << ") ";
 };
-
-float povrsinaTrokuta(const Tocka &T1, const Tocka &T2, const Tocka &T3){
-	float s = (d(T1,T2)+d(T2,T3)+d(T3,T1))/2;
-	return sqrt(s*(s-d(T1,T2))*(s-d(T2,T3))*(s-d(T3,T1)));
-}
 
 int main(){
 	Tocka T1(0,0), T2(10,0), T3(10,10), T4(0,10);
