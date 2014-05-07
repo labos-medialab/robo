@@ -194,14 +194,20 @@ int main(){
 	int N=6;
 	Tocka * vrhovi;
 	vrhovi = new Tocka [N];
-	vrhovi[0]=Tocka(0,3);
-	vrhovi[1]=Tocka(6,4);
-	vrhovi[2]=Tocka(8.134,9.6962);
-	vrhovi[3]=Tocka(4.2679,14.3923);
-	vrhovi[4]=Tocka(-1.7321,13.3923);
-	vrhovi[5]=Tocka(-3.866,7.6962);
+	vrhovi[0]=Tocka(5.36,2.24);
+	vrhovi[1]=Tocka(7.46,1.44);
+	vrhovi[2]=Tocka(9.2028,2.8587);
+	vrhovi[3]=Tocka(8.8456,5.0773);
+	vrhovi[4]=Tocka(6.7456,5.8773);
+	vrhovi[5]=Tocka(5.0028,4.4587);
 
 	PravilniPoligon P(vrhovi,N);
+
+	cout << endl;
+	Lik *L;
+	L=&T; L->status(); cout << endl;
+	L=&P; L->status(); cout << endl;
+	L=&K; L->status(); cout << endl;
 
 	return 0;
 }
