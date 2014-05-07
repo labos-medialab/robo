@@ -143,27 +143,29 @@ ostream& operator<<(ostream& buffer, const Tocka& T){
 };
 
 int main(){
-	Tocka T1(0,0), T2(10,0), T3(10,10), T4(0,10);
+	Tocka T1(-2,7), T2(6,-3), T3(13,21);
 	Trokut T(T1,T2,T3);
-	Krug K(T1, 1);
 
-	int n=3;
-	Tocka *vrsi;
-	vrsi = new Tocka[n];
-	vrsi[0]=T1;vrsi[1]=T2;vrsi[2]=T3;
-	PravilniPoligon P1(vrsi,n);
-	int N=6;
+
+	Krug K(T1, 21.5);
 	
+	int N=4;
 	Tocka * vrhovi;
 	vrhovi = new Tocka [N];
-	vrhovi[0]=Tocka(0,3);
-	vrhovi[1]=Tocka(6,4);
-	vrhovi[2]=Tocka(8.134,9.6962);
-	vrhovi[3]=Tocka(4.2679,14.3923);
-	vrhovi[4]=Tocka(-1.7321,13.3923);
-	vrhovi[5]=Tocka(-3.866,7.6962);
+	vrhovi[0]=Tocka(-1,2);
+	vrhovi[1]=Tocka(4,-2);
+	vrhovi[2]=Tocka(8,3);
+	vrhovi[3]=Tocka(3,7);
 
 	PravilniPoligon P(vrhovi,N);
+
+	Lik *L1, *L2, *L3;
+	
+	L1=&P;
+	L1->status();
+
+	L2=&T;
+	L2->status();
 
 	return 0;
 }
