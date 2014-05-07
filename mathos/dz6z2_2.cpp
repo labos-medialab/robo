@@ -13,8 +13,8 @@ namespace DenseGraph{
 		};
 		~Graph(){delete[] adj;};
 		
-		int Graph::V() const { return Vcnt; };
-		int Graph::E() const { return Ecnt; };
+		int V() const { return Vcnt; };
+		int E() const { return Ecnt; };
 		
 		void insert(int v, int w){
 			if(!edge(v,w)){
