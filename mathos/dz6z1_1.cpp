@@ -198,5 +198,13 @@ int main(){
 	L=&P;
 	L->status();
 
+	cout << endl << "krug:" << endl;
+	L=&K;
+	L->status();
+
+	cout << endl << "trokut:" << endl;
+	L=&T;
+	L->status();
+
 	return 0;
 }
