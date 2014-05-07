@@ -104,7 +104,7 @@ public:
 	};
 	float opseg(){ return N*d(vrhovi[0],vrhovi[1]); };
 	float radiusUpKruz(){ return d(vrhovi[0],vrhovi[1])/(2*tan((PI-(((N-2)*PI)/N))/2)); };
-	bool PravilniPoligon::ifPravilni(){
+	bool ifPravilni(){
 		float *a;
 		a = new float [N];
 		for(int i=0; i<N-1; i++){
