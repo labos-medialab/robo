@@ -48,9 +48,9 @@ namespace DenseGraph{
 	void Graph::show() const{
 		cout << "Vcnt=" << Vcnt << ", " << "Ecnt=" << Ecnt << endl;
 		for(int i=0;i<Vcnt*Vcnt;i++){
-            cout << adj[i] << " ";
-            if((i+1)%Vcnt==0) cout << endl;
-        }
+			cout << adj[i] << " ";
+			if((i+1)%Vcnt==0) cout << endl;
+		}
 		cout << endl;
 	};
 }//namespace
