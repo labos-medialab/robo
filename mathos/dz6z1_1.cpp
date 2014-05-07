@@ -16,7 +16,6 @@ public:
 
 	friend float d(const Tocka &T1, const Tocka &T2);
 	friend float phi(const Tocka &T1, const Tocka &T2, const Tocka &T3);
-	friend ostream& operator<<(ostream& buffer, const Tocka& z);
 };
 
 class Lik{
@@ -89,10 +88,6 @@ float phi(const Tocka &T1, const Tocka &T2, const Tocka &T3){
 	if(fi<PI/2) fi=PI-fi;
 	return fi;
 }
-
-ostream& operator<<(ostream& buffer, const Tocka& T){
-	return buffer << "T(" << T.x << ", " << T.y << ") ";
-};
 
 float povrsinaTrokuta(const Tocka &T1, const Tocka &T2, const Tocka &T3){
 	float s = (d(T1,T2)+d(T2,T3)+d(T3,T1))/2;
@@ -198,8 +193,9 @@ int main(){
 	PravilniPoligon P(vrhovi,N);
 
 	Lik *L;
-	L=&P;
 
+	cout << "poligon:" << endl;
+	L=&P;
 	L->status();
 
 	return 0;
