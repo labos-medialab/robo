@@ -191,11 +191,16 @@ int main(){
 	vrhovi = new Tocka [N];
 	vrhovi[0]=Tocka(-5,-5);
 	vrhovi[1]=Tocka(5,-5);
-	vrhovi[2]=Tocka(4.5106,8.0902);
-	vrhovi[3]=Tocka(10.3884,0);
-	vrhovi[4]=Tocka(-4.5106,8.0902);
+	vrhovi[2]=Tocka(8.0902,4.5106);
+	vrhovi[3]=Tocka(0,10.3884);
+	vrhovi[4]=Tocka(-8.0902,4.5106);
 
 	PravilniPoligon P(vrhovi,N);
+
+	Lik *L;
+	L=&P;
+
+	L->status();
 
 	return 0;
 }
