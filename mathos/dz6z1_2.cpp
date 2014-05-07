@@ -17,9 +17,6 @@ public:
 	friend float d(const Tocka &T1, const Tocka &T2);
 	friend float phi(const Tocka &T1, const Tocka &T2, const Tocka &T3);
 	friend ostream& operator<<(ostream& buffer, const Tocka& z);
-	friend class Trokut;
-
-//	Tocka * makeMeMnogokut(const Tocka &S, const float &N, const float &R);
 };
 
 class Lik{
