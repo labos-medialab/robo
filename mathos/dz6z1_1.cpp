@@ -105,9 +105,14 @@ Tocka& Tocka::operator=(const Tocka& T){
 };
 
 void Lik::status(){
-	cout << "Opseg: " << opseg() << endl;
-	cout << "Povrsina: " << povrsina() << endl;
-	cout << "Radius: " << radiusUpKruz() << endl;
+	void status(){
+		if(ifPravilan()){
+			cout << "Opseg: " << opseg() << endl;
+			cout << "Povrsina: " << povrsina() << endl;
+			cout << "Radius: " << radiusUpKruz() << endl;
+		}
+		else cout << "Lik nije ispravan" << endl;
+	};
 };
 
 Trokut::Trokut(Tocka &A, Tocka &B, Tocka &C): A(A),B(B),C(C){};
