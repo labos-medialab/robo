@@ -7,56 +7,42 @@ namespace DenseGraph{
 		int Vcnt, Ecnt;
 		int *adj;
 	public:
-		Graph(int V);
-		~Graph();
+		Graph(int V): Vcnt(V), Ecnt(0){
+			adj = new int[Vcnt*Vcnt];
+			for(int i=0; i<Vcnt*Vcnt; i++) adj[i]=0;
+		};
+		~Graph(){delete[] adj;};
 		
-		int V() const;
-		int E() const;
+		int Graph::V() const { return Vcnt; };
+		int Graph::E() const { return Ecnt; };
 		
-		void insert(int v, int w);
-		void remove(int v, int w);
+		void insert(int v, int w){
+			if(!edge(v,w)){
+				Ecnt++;
+				adj[v*Vcnt+w]=1;
+				adj[w*Vcnt+v]=1;
+			}
+		};
+
+		void remove(int v, int w){
+			if(edge(v,w)){
+				Ecnt--;
+				adj[v*Vcnt+w]=0;
+				adj[w*Vcnt+v]=0;
+			}
+		};
+
+		bool edge(int v, int w) const{ return adj[v*Vcnt+w]; };
 		
-		bool edge(int v, int w) const;
-		
-		void show() const;
+		void show() const{
+			cout << "Vcnt=" << Vcnt << ", " << "Ecnt=" << Ecnt << endl;
+			for(int i=0;i<Vcnt*Vcnt;i++){
+				cout << adj[i] << " ";
+				if((i+1)%Vcnt==0) cout << endl;
+			}
+			cout << endl;
+		};
 	};//clas
-
-	Graph::Graph(int V): Vcnt(V), Ecnt(0){
-		adj = new int[Vcnt*Vcnt];
-		for(int i=0; i<Vcnt*Vcnt; i++) adj[i]=0;
-	};
-
-	Graph::~Graph(){delete[] adj;};
-
-	int Graph::V() const { return Vcnt; };
-	int Graph::E() const { return Ecnt; };
-
-	void Graph::insert(int v, int w){
-		if(!edge(v,w)){
-			Ecnt++;
-			adj[v*Vcnt+w]=1;
-			adj[w*Vcnt+v]=1;
-		}
-	};
-	
-	void Graph::remove(int v, int w){
-		if(edge(v,w)){
-			Ecnt--;
-			adj[v*Vcnt+w]=0;
-			adj[w*Vcnt+v]=0;
-		}
-	};
-
-	bool Graph::edge(int v,int w)const{ return adj[v*Vcnt+w]; };
-
-	void Graph::show() const{
-		cout << "Vcnt=" << Vcnt << ", " << "Ecnt=" << Ecnt << endl;
-		for(int i=0;i<Vcnt*Vcnt;i++){
-			cout << adj[i] << " ";
-			if((i+1)%Vcnt==0) cout << endl;
-		}
-		cout << endl;
-	};
 }//namespace
 namespace SparseGraph
 {
