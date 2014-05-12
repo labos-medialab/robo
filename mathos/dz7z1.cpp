@@ -32,7 +32,7 @@ public:
 	{return buffer << "(" << T.x << "," << T.y << ")";};
 };
 
-void main(){
+int main(){
 	Par P1(10,0), P2(1,0);
 
 	int *x, N=5;
@@ -82,4 +82,6 @@ void main(){
 		cout << ", " << z[i];
 	}
 	cout << ";" << endl;
+
+	return 0;
 }
