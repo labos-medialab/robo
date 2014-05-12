@@ -25,8 +25,8 @@ public:
 	Par(float x, float y): x(x), y(y) {};
 	Par(const Par &T): x(T.x), y(T.y) {};
 
-	bool operator<(const Par &T)const{return(x<T.x);};
-	bool operator>(const Par &T)const{return(x>T.x);};
+	bool operator<(const Par &P)const{return(x<T.x);};
+	bool operator>(const Par &P)const{return(x>T.x);};
 
 	friend ostream& operator<<(ostream& buffer, const Par& T)
 	{return buffer << "(" << T.x << "," << T.y << ")";};
