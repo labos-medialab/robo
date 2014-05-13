@@ -13,15 +13,15 @@ public:
 	};
 	~Tuple(){delete [] podaci;};
 	
-	bool operator<(const Tuple &T) const;
-	bool operator>(const Tuple &T) const;
+//	bool operator<(const Tuple &T) const;
+//	bool operator>(const Tuple &T) const;
 
 	void ispis(){
 		cout << "(";
 		for(int i=0; i<n-1; i++){
-			cout << Ti.podaci[i] << ", ";
+			cout << podaci[i] << ", ";
 		}
-		cout << Ti.podaci[n-1] << ")" << endl;
+		cout << podaci[n-1] << ")" << endl;
 	};
 };
 
