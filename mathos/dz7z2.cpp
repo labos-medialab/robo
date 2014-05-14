@@ -5,7 +5,7 @@ template<class T, int n>
 class Tuple
 {
 public:
-	T *podaci;
+    T *podaci;
 	Tuple();
 	Tuple(T *input){
 		podaci = new T[n];
@@ -13,15 +13,28 @@ public:
 	};
 	~Tuple(){delete [] podaci;};
 	
-//	bool operator<(const Tuple &T) const;
-//	bool operator>(const Tuple &T) const;
+	bool operator<(const Tuple<T, n> &T) const{
+		for(int i=0; i<n; i++){
+			if(this->podaci[i]<T.podaci[i]) return 0;
+			else continue;
+		}
+		return 1;
+	};
+
+	bool operator>(const Tuple<T, n> &T) const{
+		for(int i=0; i<n; i++){
+			if(this->podaci[i]>T.podaci[i]) return 0;
+			else continue;
+		}
+		return 1;
+	};
 
 	void ispis(){
 		cout << "(";
 		for(int i=0; i<n-1; i++){
-			cout << podaci[i] << ", ";
+			cout << Ti.podaci[i] << ", ";
 		}
-		cout << podaci[n-1] << ")" << endl;
+		cout << Ti.podaci[n-1] << ")" << endl;
 	};
 };
 
@@ -67,6 +80,23 @@ int main(){
 	sort(To1);
 	cout << "T1";ispis(To1);
 	cout << endl;
+
+	int *T3;
+	const int n3=3;
+	T3 = new int [n3];
+
+	T3[0] = 11;
+	T3[1] = 15;
+	T3[2] = 7;
+
+	Tuple <int, n1> To3(T3);
+	
+	cout << "T3";ispis(To3);
+	sort(To3);
+	cout << "T3";ispis(To3);
+	cout << endl;
+
+	cout << (T3>T1) << endl;
 
 	float *T2;
 	const int n2=4;
