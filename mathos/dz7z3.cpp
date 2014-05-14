@@ -22,7 +22,7 @@ void sort(T *x, int N){
 				x[i]=tmp;
 			}
 		}
-		if(k%1000==0) cout << k << " ";
+		if(k%1000==0) cout << k/1000 << " ";
 		k++;
 	}
 	while(!done);
