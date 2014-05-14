@@ -22,7 +22,7 @@ void sort(T *x, int N){
 				x[i]=tmp;
 			}
 		}
-		cout << k << "\r";
+		if(k%1000==0) cout << k << " ";
 		k++;
 	}
 	while(!done);
@@ -54,7 +54,7 @@ public:
 
 int main(){
 	float *x;
-	unsigned int n=100000;
+	unsigned int n=1000000;
 	x = new float[n];
 
 	cout << "filanje" << endl;
