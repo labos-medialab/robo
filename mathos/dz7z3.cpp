@@ -2,16 +2,16 @@
 #include <cstdlib>
 using namespace std;
 
-float random(float a, float b) {return ((b-a)*((float)rand()/RAND_MAX))+a;}
 
 void fill(float *x, unsigned int N){
 	for(unsigned int i=0; i<N; i++)
-		x[i]=random(-1000,1000);
+		x[i]=((float)rand()/RAND_MAX*49999);
 }
 
 template<class T>
 void sort(T *x, int N){
 	bool done=1;
+	unsigned int k=0;
 	do{
 		done = 1;
 		for(int i=0; i<N-1; i++){
@@ -22,8 +22,11 @@ void sort(T *x, int N){
 				x[i]=tmp;
 			}
 		}
+		cout << k << "\r";
+		k++;
 	}
 	while(!done);
+	cout << endl;
 };
 
 template<class T>
@@ -51,15 +54,15 @@ public:
 
 int main(){
 	float *x;
-	unsigned int n=42949672;
+	unsigned int n=100000;
 	x = new float[n];
 
 	cout << "filanje" << endl;
 	fill(x,n);
 	cout << "sortiranje" << endl;
 	sort(x,n);
-	cout << "ispis" << endl;
-	ispis(x,n);
+	cout << "end" << endl;
+	//ispis(x,n);
 
 	return 0;
 }
