@@ -32,9 +32,9 @@ public:
 	void ispis(){
 		cout << "(";
 		for(int i=0; i<n-1; i++){
-			cout << Ti.podaci[i] << ", ";
+			cout << podaci[i] << ", ";
 		}
-		cout << Ti.podaci[n-1] << ")" << endl;
+		cout << podaci[n-1] << ")" << endl;
 	};
 };
 
@@ -56,15 +56,6 @@ void sort(Tuple<T,n> &Ti){
 	while(!done);
 };
 
-template<class T, int n>
-void ispis(Tuple<T,n> &Ti){
-	cout << "(";
-	for(int i=0; i<n-1; i++){
-		cout << Ti.podaci[i] << ", ";
-	}
-	cout << Ti.podaci[n-1] << ")" << endl;
-};
-
 int main(){
 	int *T1;
 	const int n1=3;
@@ -76,9 +67,9 @@ int main(){
 
 	Tuple <int, n1> To1(T1);
 	
-	cout << "T1";ispis(To1);
+	cout << "T1";To1.ispis();
 	sort(To1);
-	cout << "T1";ispis(To1);
+	cout << "T1";To1.ispis();
 	cout << endl;
 
 	int *T3;
@@ -91,9 +82,9 @@ int main(){
 
 	Tuple <int, n1> To3(T3);
 	
-	cout << "T3";ispis(To3);
+	cout << "T3";To3.ispis();
 	sort(To3);
-	cout << "T3";ispis(To3);
+	cout << "T3";To3.ispis();
 	cout << endl;
 
 	cout << (T3>T1) << endl;
@@ -109,9 +100,9 @@ int main(){
 
 	Tuple <float, n2> To2(T2);
 	
-	cout << "T2";ispis(To2);
+	cout << "T2";To2.ispis();
 	sort(To2);
-	cout << "T2";ispis(To2);
+	cout << "T2";To2.ispis();
 
 	return 1;
 }
